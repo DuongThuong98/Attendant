@@ -1,0 +1,49 @@
+<div class="nav_menu">
+    <nav>
+        <div class="nav toggle">
+            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+        </div>
+<!--         <div class="navbar-nav" style="padding-top: 12px">
+            <select class="form-control" [(ngModel)]="selected_language" (ngModelChange)="onChangeLanguage()">
+                <option *ngFor="let language of languages" [value]="language.id">{{language.name}}</option>
+            </select>
+        </div> -->
+        <ul class="nav navbar-nav navbar-right">
+            <li class="">
+                <a class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img id="topNavPic" [src]="authService.current_user.avatar">
+                    <strong>{{authService.current_user.first_name}} {{authService.current_user.last_name}} <span class=" fa fa-angle-down"></span></strong>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a (click)="onChangePassword()"><i class="fa fa-cog pull-right"></i> Change Password</a></li>
+                    <li><a (click)="logout()"><i class="fa fa-sign-out pull-right"></i> Logout </a></li>
+                </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-bell-o"></i>
+                    <span *ngIf="notifications.length != 0" class="badge bg-green">{{notifications.length}}</span>
+                </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li *ngIf="notifications.length == 0">
+                        <a class="text-center">
+                            <label>No notification</label>
+                        </a>
+                    </li>
+                    <ng-container *ngIf="notifications.length != 0">
+                        <li *ngFor="let notification of notifications;let i = index">
+                            <a (click)="onNotificationClick(i)">
+                                <span class="image"><i class="fa fa-envelope"></i></span>
+                                <span>
+                                <span>{{notification.from}}</span>
+                                <span class="time">{{notification.created_at | date:'short'}}</span>
+                                </span>
+                                <span class="message">{{notification.message}}</span>
+                            </a>
+                        </li>
+                    </ng-container>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,2 @@
+<check-attendance-quiz-teacher *ngIf="authService.current_user.role_id == appService.userType.teacher"></check-attendance-quiz-teacher>
+<check-attendance-quiz-student *ngIf="authService.current_user.role_id == appService.userType.student"></check-attendance-quiz-student>

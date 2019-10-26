@@ -1,0 +1,38 @@
+<div class="modal fade" id="createAbsenceRequestModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Absence request</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Reason* </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea class="form-control" name="reason" rows="4" [(ngModel)]="new_reason"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> From - To* </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <div class="input-prepend input-group">
+                                        <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" name="from_to" id="from_to" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="onConfirmCreateRequest()">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

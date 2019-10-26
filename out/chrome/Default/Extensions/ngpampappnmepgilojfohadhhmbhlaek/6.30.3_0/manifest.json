@@ -1,0 +1,30 @@
+{
+   "author": "Tonec, Inc.",
+   "background": {
+      "persistent": true,
+      "scripts": [ "background.js" ]
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "content.js" ],
+      "matches": [ "http://*/*", "https://*/*", "ftp://*/*", "file:///*" ],
+      "run_at": "document_start"
+   } ],
+   "default_locale": "en",
+   "description": "Download files with Internet Download Manager",
+   "homepage_url": "http://www.internetdownloadmanager.com/",
+   "icons": {
+      "128": "images/logoBig.png",
+      "16": "images/dwnlLink.png",
+      "48": "images/logoSmall.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAutN8/aVCnWWo01YitMu1kREcX+50UY//YxrPd0XXSLTK0mEJqPRYbcgxjxAfUc1+eHtFbWvR5BDQvip0+3chrMpGfG+Fwn/aQkaZj7T6gEqbHQElqoncCtXaDTRvo0M7Pj0RWjc1dTV+COlhHZI4RIw4TmL1SAvwO/1+VUgg4ohTjFNKhcSsz89kUbaPqfMfFk1UbrI3pkCHTUNCu0+doN7KQDbH1QBlYxt3ajsd15hzhca/dT4eDfew1nHRADOF5A4JNEuDHoyR/ETvn/CZgNeSo2lWNyYp/xpxRR6Fygjhjf4rNoRm/CtdCCF6mPNjbOkvIU8nQJQvvj08QZ3yFQIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "32.0",
+   "name": "IDM Integration Module",
+   "offline_enabled": false,
+   "permissions": [ "\u003Call_urls>", "tabs", "cookies", "contextMenus", "webNavigation", "webRequest", "webRequestBlocking", "management", "storage", "proxy", "nativeMessaging" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "6.30.3",
+   "web_accessible_resources": [ "document.js", "captured.html", "captured.js" ]
+}

@@ -1,0 +1,90 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Semesters</h3>
+            <div class="navbar-btn pull-right">
+                <button type="button" class="btn btn-primary btn-round" (click)="onAddSemester()"> <i class="fa fa-plus"></i> Add</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="form-group col-md-4 col-xs-12">
+                    <input placeholder="Search" class="form-control" [(ngModel)]="searchText" (ngModelChange)="getSemesterList()" />
+                </div>
+            </div>
+            <br>
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Vacation time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let semester of semesters" (click)='onCellClick()'>
+                        <td>{{semester.name}}</td>
+                        <td>{{semester.start_date | date: 'shortDate'}}</td>
+                        <td>{{semester.end_date | date: 'shortDate'}}</td>
+                        <td>{{semester.vacation_time}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [(ngModel)]="currentPage" (pageChanged)="onPageChanged($event)" class="pull-right no_margin"></pagination>
+            <div class="form-group">
+                <select [(ngModel)]="itemsPerPage" (ngModelChange)="getSemesterList()">
+                    <option>10</option>
+                    <option>30</option>
+                    <option>50</option>
+                </select>
+                <span>Items/page</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addSemesterModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add new Semester</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" [(ngModel)]="new_semester_name" name="new_semester_name" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Study time* </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="input-prepend input-group">
+                                        <span class="add-on input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" name="from_to" id="from_to" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Vacation time</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <textarea [(ngModel)]="new_semester_vacation_time" rows="3" name="new_semester_vacation_time" required="required" class="form-control col-md-7 col-xs-12"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="confirmAddSemester()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

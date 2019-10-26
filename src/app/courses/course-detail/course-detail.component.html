@@ -1,0 +1,2 @@
+<course-detail-staff *ngIf="authService.current_user.role_id == appService.userType.staff"></course-detail-staff>
+<course-detail-teacher *ngIf="authService.current_user.role_id == appService.userType.teacher"></course-detail-teacher>

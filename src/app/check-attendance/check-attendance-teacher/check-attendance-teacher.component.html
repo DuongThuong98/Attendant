@@ -1,0 +1,270 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Check Attendance ({{selected_attendance['created_at'] | date:'short'}})</h3>
+            <div class="pull-right">
+                <select class="form-control" [(ngModel)]="selected_attendance_id" (ngModelChange)="onChangeAttendance()">
+                    <option *ngFor="let attendance of opening_attendances" [value]="attendance.id">{{attendance.course_name}}-{{attendance.class_name}}</option>
+                </select>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-1" style="text-align: right">
+                    <h4>Course:</h4>
+                </div>
+                <div class="col-xs-5">
+                    <h4>{{selected_attendance['course_code']}} - {{selected_attendance['course_name']}}</h4>
+                </div>
+                <div class="col-xs-1" style="text-align: right;">
+                    <h4>Class: </h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4>{{selected_attendance['class_name']}}</h4>
+                </div>
+                <div class="col-xs-2" style="text-align: right;">
+                    <h4>Present/Total: </h4>
+                </div>
+                <div class="col-xs-2">
+                    <h4>{{selected_attendance['student_count']}} / {{selected_attendance['total_stud']}}</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="pull-right">
+                    <button class="btn btn-primary" (click)="generateQRCode()"><i class="fa fa-qrcode"></i> QR code</button>
+                    <button class="btn btn-primary" (click)="generateDelegateCode()"><i class="fa fa-external-link-square"></i> Delegate Code</button>
+                    <button class="btn btn-primary" (click)="generateQuiz()"><i class="fa fa-question-circle"></i> Quiz</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <tabset [justified]="true">
+                    <tab heading='Current Week'>
+                        <br>
+                        <ng-container *ngFor="let student of check_attendance_list;let i = index;">
+                            <ng-container *ngIf="!student.exemption">
+                                <div class="col-sm-3 col-md-55 text-center">
+                                    <div class="thumbnail" style="height: 190px">
+                                        <ng-template #tolTemplate1>
+                                            <div>Method : {{student.attendance_details[student.attendance_details.length-1].method}}</div>
+                                            <div>Checked at : {{student.attendance_details[student.attendance_details.length-1].attendance_time | date:'short'}}</div>
+                                        </ng-template>
+                                        <div class="image" (click)="onAttendanceCheckClick(i,student.attendance_details.length-1)" [tooltip]="tolTemplate1" container="body">
+                                            <div class="checked_overlay" *ngIf="student.attendance_details[student.attendance_details.length-1].attendance_type"><i [ngClass]="['fa avatar_check', student.attendance_details[student.attendance_details.length-1]['icon']]"></i></div>
+                                            <img [src]="student.avatar" class="attendance_avatar">
+                                        </div>
+                                        <div class="caption">
+                                            <p><label>{{student.code}}</label></p>
+                                            <p><label>{{student.name}}</label></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </tab>
+                    <tab class="text-center" heading='Class management'>
+                        <br>
+                        <label class="note">Note: Student's interactions: No. answered questions (<i class="fa fa-question-circle-o"></i>), No. discussions (<i class="fa fa-comments"></i>), No. presentations (<i class="fa fa-laptop"></i>)</label>
+                        <br>
+                        <ng-container *ngFor="let student of check_attendance_list;let i = index;">
+                            <ng-container *ngIf="!student.exemption">
+                                <div class="col-sm-3 col-md-55 text-center" *ngIf="student.attendance_details[student.attendance_details.length-1].attendance_type">
+                                    <div class="thumbnail" style="height: 220px">
+                                        <div class="image">
+                                            <img [src]="student.avatar" class="attendance_avatar">
+                                        </div>
+                                        <div class="caption">
+                                            <div class="row student_interaction">
+                                                <button class="btn btn-round btn-primary" (click)="confirmInteraction(student,appService.student_interaction_type.answer_question)"><i class="fa fa-question-circle-o"></i> {{student.attendance_details[student.attendance_details.length-1].answered_questions}}</button>
+                                                <button class="btn btn-round btn-primary" (click)="confirmInteraction(student,appService.student_interaction_type.discuss)"><i class="fa fa-comments"></i> {{student.attendance_details[student.attendance_details.length-1].discussions}}</button>
+                                                <button class="btn btn-round btn-primary" (click)="confirmInteraction(student,appService.student_interaction_type.present)"><i class="fa fa-laptop"></i> {{student.attendance_details[student.attendance_details.length-1].presentations}}</button>
+                                            </div>
+                                            <p><label>{{student.code}}</label></p>
+                                            <p><label>{{student.name}}</label></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </tab>
+                    <tab heading='History'>
+                        <br>
+                        <button class="pull-right btn-primary btn" (click)="changeHistory()">
+                            <span *ngIf="is_show_attendance_history">Show interaction history</span>
+                            <span *ngIf="!is_show_attendance_history">Show attendance history</span>
+                        </button>
+                        <table *ngIf="is_show_attendance_history" class="table table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th colspan="2">Week 1</th>
+                                    <th colspan="2">Week 2</th>
+                                    <th colspan="2">Week 3</th>
+                                    <th colspan="2">Week 4</th>
+                                    <th colspan="2">Week 5</th>
+                                    <th colspan="2">Week 6</th>
+                                    <th colspan="2">Week 7</th>
+                                    <th colspan="2">Week 8</th>
+                                    <th colspan="2">Week 9</th>
+                                    <th colspan="2">Week 10</th>
+                                    <th colspan="2">Week 11</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let student of check_attendance_list;let i = index;">
+                                    <td>{{i+1}}</td>
+                                    <td>{{student.code}}</td>
+                                    <td>{{student.name}}</td>
+                                    <ng-container *ngIf="student.exemption">
+                                        <td class="gray_background" colspan="22" style="font-weight: bold;">Exempted</td>
+                                    </ng-container>
+                                    <ng-container *ngIf="!student.exemption">
+                                        <ng-container *ngFor="let attendance_detail of student.attendance_details;let j = index">
+                                            <ng-template #tolTemplate>
+                                                <div>Method : {{attendance_detail.method}}</div>
+                                                <div>Created at : {{attendance_detail.created_at | date:'short'}}</div>
+                                                <div>Checked at : {{attendance_detail.attendance_time | date:'short'}}</div>
+                                                <div *ngIf="attendance_detail.edited_by">Edited by : {{attendance_detail.editor}}</div>
+                                                <div *ngIf="attendance_detail.edited_by">Reason : {{attendance_detail.edited_reason}}</div>
+                                            </ng-template>
+                                            <td width="3%" [ngClass]="{'gray_background': j < student.attendance_details.length-1, 'warning_background': attendance_detail.edited_by}" [tooltip]="tolTemplate" container="body"><i [ngClass]="['fa attendance-check', attendance_detail.icon]"></i></td>
+                                        </ng-container>
+                                        <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]">
+                                            <td class="gray_background" width="3%" *ngIf="number > student.attendance_details.length"></td>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div *ngIf="!is_show_attendance_history">
+                            <div>
+                                <label>Student's interaction : </label>
+                                <label class="radio-inline"><input type="radio" name="optradio" [value]="appService.student_interaction_type.answer_question" [(ngModel)]="selected_interaction">Answered questions (<i class="fa fa-question-circle-o"></i>)</label>
+                                <label class="radio-inline"><input type="radio" name="optradio" [value]="appService.student_interaction_type.discuss" [(ngModel)]="selected_interaction">Discussions (<i class="fa fa-comments"></i>)</label>
+                                <label class="radio-inline"><input type="radio" name="optradio" [value]="appService.student_interaction_type.present" [(ngModel)]="selected_interaction">Presentations (<i class="fa fa-laptop"></i>)</label>
+                            </div>
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th colspan="2">Week 1</th>
+                                        <th colspan="2">Week 2</th>
+                                        <th colspan="2">Week 3</th>
+                                        <th colspan="2">Week 4</th>
+                                        <th colspan="2">Week 5</th>
+                                        <th colspan="2">Week 6</th>
+                                        <th colspan="2">Week 7</th>
+                                        <th colspan="2">Week 8</th>
+                                        <th colspan="2">Week 9</th>
+                                        <th colspan="2">Week 10</th>
+                                        <th colspan="2">Week 11</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let student of check_attendance_list;let i = index;">
+                                        <td>{{student.code}}</td>
+                                        <td>{{student.name}}</td>
+                                        <ng-container *ngFor="let attendance_detail of student.attendance_details;let j = index">
+                                            <td [ngClass]="{'gray_background': j < student.attendance_details.length-1}"><label *ngIf="selected_interaction == appService.student_interaction_type.answer_question">{{attendance_detail.answered_questions}}</label><label *ngIf="selected_interaction == appService.student_interaction_type.discuss">{{attendance_detail.discussions}}</label><label *ngIf="selected_interaction == appService.student_interaction_type.present">{{attendance_detail.presentations}}</label></td>
+                                        </ng-container>
+                                        <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]">
+                                            <td class="gray_background" width="3%" *ngIf="number > student.attendance_details.length"></td>
+                                        </ng-container>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+            <div class="row">
+                <div class="pull-right">
+                    <button class="btn btn-danger" (click)="onCancelAttendanceSession()">Cancel Attendance Session</button>
+                    <button class="btn btn-success" (click)="onCloseAttendanceSession()">Close Attendance Session</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmCancelModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm Cancel Session</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        *All data of this session will be deleted.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-danger" (click)="confirmCancelAttendanceSession()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmEndModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm End Session</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        This session won't be updated once it's closed.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="confirmCloseAttendanceSession()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="sessionStoppedModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{stopped_modal_message}}</h4>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="router.navigate(['/dashboard'])">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delegateCodeModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delegate Code</h4>
+                </div>
+                <div class="modal-body">
+                    <h3 class="well well-sm text-center">{{delegate_code}}</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

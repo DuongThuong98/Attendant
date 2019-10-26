@@ -1,0 +1,166 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="row">
+                <div class="col-sm-2" style="padding: 0;text-align: center;">
+                    <img id="profilePic" style="height:150px;width:150px;padding-bottom: 5px;">
+                    <ng-container *ngIf="isEditingProfile">
+                        <label class="btn btn-primary">
+                            Change Picture
+                            <input type="file" style="display:none;" name="uploads" (change)="onEditProfilePic($event)">
+                        </label>  
+                    </ng-container>    
+                </div>
+                <div class="col-sm-4 col-xs-12 profile_left">
+                    <ng-container *ngIf="!isEditingProfile">
+                        <h3>{{editing_name}}</h3>
+                        <ul class="list-unstyled user_data" style="font-size: medium;">
+                            <li>
+                                <i class="fa fa-phone"></i> {{authService.current_user.phone}}
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope-o"></i> {{authService.current_user.email}}
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" (click)="onEditProfile()"><i class="fa fa-pencil"></i> Edit</button>
+                    </ng-container>
+                    <ng-container *ngIf="isEditingProfile" (keydown)="keyDownFunction($event)">
+                        <h3><input class="form-control" type="text" name="editing_name" [(ngModel)] = "editing_name"></h3>
+                        <ul class="list-unstyled user_data" style="font-size: medium;">
+                            <li>
+                                <i class="fa fa-phone"></i>
+                                <input class="form-control" type="text" name="editing_phone" [(ngModel)]="editing_phone">
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope-o"></i>
+                                <input class="form-control" type="text" name="editing_mail" [(ngModel)]="editing_mail">
+                            </li>
+                        </ul>
+                        <button class="btn btn-default" (click)="onCancelEditProfile()">Cancel</button>
+                        <button class="btn btn-success" (click)="onSaveEditProfile()">Save</button>
+                    </ng-container>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="row pad-top col-xs-12">
+                        <button type="button" class="btn btn-primary" (click)="onSendFeedback()">
+                            <i class="fa fa-comments fa-3x"></i>
+                            <h5>Send Feedback</h5>
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="onChangePassword()">
+                            <i class="fa fa-cog fa-3x"></i>
+                            <h5>Change Password</h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Courses</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="form-group col-sm-4 col-xs-12">
+                    <input placeholder="Search Course Name" class="form-control input_search" [(ngModel)]="search_text" (ngModelChange)="getTeachingList()" />
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <div class="col-xs-6">
+                        <select class="form-control" [(ngModel)]="selectedProgram" (ngModelChange)="onChangeProgram()">
+                            <option *ngFor="let program of programs" [value]="program.id">{{program.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6">
+                        <select class="form-control" [(ngModel)]="selectedClass" (ngModelChange)="getTeachingList()">
+                            <option *ngFor="let class of filteredClasses" [value]="class.id">{{class.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Class</th>
+                            <th>Lecturers</th>
+                            <th>TAs</th>
+                            <th>Total students</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let course of teaching_courses">
+                            <td><a routerLink="/courses/{{course.id}}" routerLinkActive="active"><strong>{{course.code}} - {{course.name}}</strong></a></td>
+                            <td>{{course.class_name}}</td>
+                            <td>{{course.lecturers}}</td>
+                            <td>{{course.tas}}</td>
+                            <td>{{course.total_stud}}</td>
+                            <td *ngIf="!course.is_opening_attendance"><label class="red_text">Closed</label></td>
+                            <td *ngIf="course.is_opening_attendance"><label class="green_text">Opening</label></td>
+                            <td *ngIf="!course.is_opening_attendance"><button type="button" class="btn btn-primary btn-round" (click)="onCheckAttendance($event,course)">Open Attendance</button></td>
+                            <td *ngIf="course.is_opening_attendance"><button type="button" class="btn btn-success btn-round" (click)="onCheckAttendance($event,course)">Check Attendance</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<send-feedback-modal (onSent)="onFeedbackSent($event)"></send-feedback-modal>
+<div class="modal fade" id="confirmModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm check attendance</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-4" style="text-align: right">
+                            <h4>Course:</h4>
+                        </div>
+                        <div class="col-xs-8">
+                            <h4>{{selected_course['code']}} - {{selected_course['name']}}</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4" style="text-align: right;">
+                            <h4>Class: </h4>
+                        </div>
+                        <div class="col-xs-8">
+                            <h4>{{selected_course['class_name']}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="confirmAction()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="progressModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h2>Loading</h2>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

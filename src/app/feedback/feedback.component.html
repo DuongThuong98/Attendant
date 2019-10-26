@@ -1,0 +1,2 @@
+<app-feedback-staff *ngIf="authService.current_user.role_id == appService.userType.staff || authService.current_user.role_id == appService.userType.admin"></app-feedback-staff>
+<app-feedback-history *ngIf="authService.current_user.role_id == appService.userType.student || authService.current_user.role_id == appService.userType.teacher"></app-feedback-history>

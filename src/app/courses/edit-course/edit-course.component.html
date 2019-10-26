@@ -1,0 +1,207 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Edit Course</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <form class="form-horizontal">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Code*</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" [(ngModel)]="course.code" name="code" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Name*</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" [(ngModel)]="course.name" name="name" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Office hour </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="office_hour" [(ngModel)]="course.office_hour">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Note </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="note" [(ngModel)]="course.note">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Lecturer*</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-control tag_list col-md-7 col-xs-12" (click)="onOpenChooseLecturer()">
+                                        <button class="btn btn-primary disabled" *ngFor="let lecturer of lecturers" style="margin-bottom:5px">{{lecturer.first_name}} {{lecturer.last_name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> TA </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-control tag_list col-md-7 col-xs-12" (click)="onOpenChooseTA()">
+                                        <button class="btn btn-primary disabled" *ngFor="let lecturer of TAs" style="margin-bottom:5px">{{lecturer.first_name}} {{lecturer.last_name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" (click)="onCancelEditCourse()">Cancel</button>
+                    <button type="button" class="btn btn-success" (click)="onSaveCourse()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="chooseLecturerModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-lg vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Lecturers</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6 col-xs-12 text-center">
+                                <h4>Teacher list</h4>
+                                <input placeholder="Search Name" class="form-control" [(ngModel)]="searchText" (ngModelChange)="searchList()" name="searchText" />
+                                <div style="overflow:auto; max-height:300px;">
+                                    <table class="table table-bordered text-center table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let teacher of filtered_teachers" (click)='onSelectLecturerClick(teacher.id)'>
+                                                <td>{{teacher.first_name}} {{teacher.last_name}}</td>
+                                                <td>{{teacher.email}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-xs-12 col-sm-offset-1 text-center">
+                                <h4>Selected Lecturers</h4>
+                                <div style="overflow:auto; max-height:300px;">
+                                    <table class="table table-bordered text-center table-hover table-fixed">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let teacher of temp_lecturers" (click)='onRemoveLecturerClick(teacher.id)'>
+                                                <td>{{teacher.first_name}} {{teacher.last_name}}</td>
+                                                <td>{{teacher.email}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" (click)="onCancelChooseLecturer()">Cancel</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="onSaveChooseLecturer()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="chooseTAModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-lg vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit TAs</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="col-sm-6 col-xs-12 text-center">
+                                <h4>Teacher list</h4>
+                                <input placeholder="Search Name" class="form-control" [(ngModel)]="searchText" (ngModelChange)="searchList()" name="searchText" />
+                                <div style="overflow:auto; max-height:300px;">
+                                    <table class="table table-bordered text-center table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let teacher of filtered_teachers" (click)='onSelectTAClick(teacher.id)'>
+                                                <td>{{teacher.first_name}} {{teacher.last_name}}</td>
+                                                <td>{{teacher.email}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-xs-12 col-sm-offset-1 text-center">
+                                <h4>Selected TAs</h4>
+                                <div style="overflow:auto; max-height:300px;">
+                                    <table class="table table-bordered text-center table-hover table-fixed">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let teacher of temp_TAs" (click)='onRemoveTAClick(teacher.id)'>
+                                                <td>{{teacher.first_name}} {{teacher.last_name}}</td>
+                                                <td>{{teacher.email}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" (click)="onCancelChooseTA()">Cancel</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="onSaveChooseTA()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<result-message-modal [modal_title]="apiResult" [modal_message]="apiResultMessage"></result-message-modal>
+<div class="modal fade" id="progressModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h2>Loading</h2>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<div>
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <img src="assets/images/logo2.png" alt="">
+                <form (keydown)="keyDownFunction($event)">
+                    <h1>Login</h1>
+                    <div *ngIf="authService.redirectMessage" class="alert-danger alert text-center" style="padding-top: 6px;padding-bottom: 6px">
+                        <i class="fa fa-warning"></i> {{authService.redirectMessage}}
+                    </div>
+                    <div *ngIf="error_message" class="alert alert-danger text-center" style="padding-top: 6px;padding-bottom: 6px">
+                        {{error_message}}
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" name="username" placeholder="Username" [(ngModel)]="username" />
+                    </div>
+                    <div>
+                        <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="password" />
+                    </div>
+                    <div>
+                        <button class="btn btn-default" (click)="login()">Log in</button>
+                    </div>
+                    <div>
+                        <a (click)="forgotPassword()">Forgot your password?</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

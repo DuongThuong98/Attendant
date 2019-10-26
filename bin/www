@@ -1,0 +1,191 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('quanlydiemdanh:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+var io = require('socket.io').listen(server);
+
+app.set('socket', io);
+
+io.sockets.on('connection', function(socket){
+  console.log('Socket connected');
+
+  // Socket event for Check Attendance updated
+  socket.on('checkAttendanceUpdated', function(checkAttendanceUpdated){
+    console.log('checkAttendanceUpdated');
+    console.log(checkAttendanceUpdated);
+    //socket.broadcast.emit('checkAttendanceUpdated', checkAttendanceUpdated);
+    io.emit('checkAttendanceUpdated', checkAttendanceUpdated);
+  });
+
+  // Socket event for Check Attendance created
+  socket.on('checkAttendanceCreated', function(checkAttendanceCreated){
+    console.log('checkAttendanceCreated');
+    console.log(checkAttendanceCreated);
+    //socket.broadcast.emit('checkAttendanceCreated', checkAttendanceCreated);
+    io.emit('checkAttendanceCreated', checkAttendanceCreated);
+  });
+
+  // Socket event for Check Attendance created
+  socket.on('checkAttendanceStopped', function(checkAttendanceStopped){
+    console.log('checkAttendanceStopped');
+    console.log(checkAttendanceStopped);
+    //socket.broadcast.emit('checkAttendanceStopped', checkAttendanceStopped);
+    io.emit('checkAttendanceStopped', checkAttendanceStopped);
+  });
+
+  // Socket event for teacher stop quiz
+  socket.on('quizStopped', function(quizStopped){
+    console.log('quizStopped');
+    console.log(quizStopped);
+    io.emit('quizStopped', quizStopped);
+  });
+
+  // Socket event for teacher stop quiz
+  socket.on('quizEnded', function(quizEnded){
+    console.log('quizEnded');
+    console.log(quizEnded);
+    io.emit('quizEnded', quizEnded);
+  });
+
+  // Socket event for teacher ready question
+  socket.on('quizQuestionReady', function(quizQuestionReady){
+    console.log('quizQuestionReady');
+    console.log(quizQuestionReady);
+    io.emit('quizQuestionReady', quizQuestionReady);
+  });
+
+  // Socket event for teacher load question
+  socket.on('quizQuestionLoaded', function(quizQuestionLoaded){
+    console.log('quizQuestionLoaded');
+    console.log(quizQuestionLoaded);
+    io.emit('quizQuestionLoaded', quizQuestionLoaded);
+  });
+
+  // Socket event for teacher end question
+  socket.on('quizQuestionEnded', function(quizQuestionEnded){
+    console.log('quizQuestionEnded');
+    console.log(quizQuestionEnded);
+    io.emit('quizQuestionEnded', quizQuestionEnded);
+  });
+
+  // Socket event for student join quiz
+  socket.on('joinedQuiz', function(joinedQuiz){
+    console.log('joinedQuiz');
+    console.log(joinedQuiz);
+    io.emit('joinedQuiz', joinedQuiz);
+  });
+
+  // Socket event for student quit quiz
+  socket.on('quittedQuiz', function(quittedQuiz){
+    console.log('quittedQuiz');
+    console.log(quittedQuiz);
+    io.emit('quittedQuiz', quittedQuiz);
+  });
+
+  // Socket event for student answer quiz
+  socket.on('answeredQuiz', function(answeredQuiz){
+    console.log('answeredQuiz');
+    console.log(answeredQuiz);
+    io.emit('answeredQuiz', answeredQuiz);
+  });
+
+  // Socket event for notification pushed
+  socket.on('notificationPushed', function(notificationPushed){
+    console.log('notificationPushed');
+    console.log(notificationPushed);
+    io.emit('notificationPushed', notificationPushed);
+  });
+
+
+  socket.on('disconnect', function() {
+      console.log('Socket disconnect!');
+   });
+});
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port, "0.0.0.0");
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+//module.exports = app;

@@ -1,0 +1,178 @@
+<div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="row">
+                <div class="col-sm-2" style="padding: 0;text-align: center;">
+                    <img id="profilePic" style="height:150px;width:150px;padding-bottom: 5px;">
+                    <ng-container *ngIf="isEditingProfile">
+                        <label class="btn btn-primary">
+                            Change Picture
+                            <input type="file" style="display:none;" name="uploads" (change)="onEditProfilePic($event)">
+                        </label>  
+                    </ng-container>    
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12 profile_left">
+                    <ng-container *ngIf="!isEditingProfile"> 
+                        <h3>{{editing_name}}</h3>
+                        <ul class="list-unstyled user_data" style="font-size: medium;">
+                            <li>
+                                <i class="fa fa-phone"></i> {{authService.current_user.phone}}
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope-o"></i> {{authService.current_user.email}}
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" (click)="onEditProfile()"><i class="fa fa-pencil"></i> Edit</button>
+                    </ng-container>
+                    <ng-container *ngIf="isEditingProfile" (keydown)="keyDownFunction($event)">
+                        <h3><input class="form-control" type="text" name="editing_name" [(ngModel)] = "editing_name"></h3>
+                        <ul class="list-unstyled user_data" style="font-size: medium;">
+                            <li>
+                                <i class="fa fa-phone"></i>
+                                <input class="form-control" type="text" name="editing_phone" [(ngModel)]="editing_phone">
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope-o"></i> {{authService.current_user.email}}
+                            </li>
+                        </ul>
+                        <button class="btn btn-default" (click)="onCancelEditProfile()">Cancel</button>
+                        <button class="btn btn-success" (click)="onSaveEditProfile()">Save</button>
+                    </ng-container>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="row pad-top col-xs-12">
+                        <button type="button" class="btn btn-primary" (click)="onCreateAbsenceRequest()">
+                            <i class="fa fa-envelope fa-3x"></i>
+                            <h5>Send Absence Request</h5>
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="onSendFeedback()">
+                            <i class="fa fa-comments fa-3x"></i>
+                            <h5>Send Feedback</h5>
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="onChangePassword()">
+                            <i class="fa fa-cog fa-3x"></i>
+                            <h5>Change Password</h5>
+                        </button>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12" *ngIf="opening_attendance_for_student.length > 0">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Courses with Opening Attendance</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Attendance Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let course of opening_attendance_for_student;let i = index">
+                            <td>{{course.code}} - {{course.name}}</td>
+                            <ng-container *ngIf="course.exemption">
+                                <td class="gray_background" colspan="2" style="font-weight: bold;">Exempted</td>
+                            </ng-container>
+                            <ng-container *ngIf="!course.exemption">
+                                <td *ngIf="course.attendance_type == appService.attendance_type.absent"><label class="red_text">Not checked</label></td>
+                                <td *ngIf="course.attendance_type != appService.attendance_type.absent"><label class="green_text">{{course.checked_by}}</label></td>
+                                <td *ngIf="course.attendance_type == appService.attendance_type.absent"><button type="button" class="btn btn-primary btn-round" (click)="onRequestToBeChecked(course)">Request to be checked</button></td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <ng-template #howto>
+                <div>To calculate the absence percentage, You divide the total number of attendances (white-box) for the number of absences (empty white-box) and multiply by 100.</div>
+            </ng-template>
+            <h3>Attendance Progression <small [tooltip]="howto" container="body"><a style="text-decoration: underline">(How to calculate % absences?)</a></small></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <ng-template #predictedTemplate>
+                                <div>The predicted percentages are based on a specific lecturer. Calculated by all attendances opened and No.courses teached by that lecturer.</div>
+                            </ng-template>
+                            <th>Course</th>
+                            <th>Actual % Absences</th>
+                            <th>Predicted % Absences <i [tooltip]="predictedTemplate" container="body" class="fa fa-question-circle"></i></th>
+                            <th colspan="2">Week 1</th>
+                            <th colspan="2">Week 2</th>
+                            <th colspan="2">Week 3</th>
+                            <th colspan="2">Week 4</th>
+                            <th colspan="2">Week 5</th>
+                            <th colspan="2">Week 6</th>
+                            <th colspan="2">Week 7</th>
+                            <th colspan="2">Week 8</th>
+                            <th colspan="2">Week 9</th>
+                            <th colspan="2">Week 10</th>
+                            <th colspan="2">Week 11</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let course of attendance_list_by_student;let i = index">
+                            <td>{{course.code}} - {{course.name}}</td>
+                            <ng-container *ngIf="course.exemption">
+                                <td class="gray_background" colspan="24" style="font-weight: bold;">Exempted</td>
+                            </ng-container>
+                            <ng-container *ngIf="!course.exemption">
+                                <td>{{course.absences}}/{{course.attendance_details.length}} ({{(course.absences/course.attendance_details.length) | percent:'2.1-1'}})</td>
+                                <td></td>
+                                <ng-container *ngFor="let attendance_detail of course.attendance_details;let j = index">
+                                    <ng-template #tolTemplate>
+                                        <div>Method : {{attendance_detail.method}}</div>
+                                        <div>Created at : {{attendance_detail.created_at | date:'short'}}</div>
+                                        <div>Checked at : {{attendance_detail.attendance_time | date:'short'}}</div>
+                                        <div *ngIf="attendance_detail.edited_by">Edited by : {{attendance_detail.editor}}</div>
+                                        <div *ngIf="attendance_detail.edited_by">Reason : {{attendance_detail.edited_reason}}</div>
+                                    </ng-template>
+                                    <td [tooltip]="tolTemplate" container="body" [ngClass]="{'warning_background': attendance_detail.edited_by}"><i [ngClass]="['fa attendance-check', attendance_detail.icon]"></i></td>
+                                </ng-container>
+                                <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]">
+                                    <td class="gray_background" width="3%" *ngIf="number > course.attendance_details.length"></td>
+                                </ng-container>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<create-absence-request-modal (onConfirmed)="onRequestCreated($event)"></create-absence-request-modal>
+<send-feedback-modal (onSent)="onFeedbackSent($event)"></send-feedback-modal>
+<div class="modal fade" id="progressModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h2>Loading</h2>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+<app-dashboard-staff *ngIf="authService.current_user.role_id == appService.userType.staff"></app-dashboard-staff>
+<app-dashboard-admin *ngIf="authService.current_user.role_id == appService.userType.admin"></app-dashboard-admin>
+<app-dashboard-student *ngIf="authService.current_user.role_id == appService.userType.student"></app-dashboard-student>
+<app-dashboard-teacher *ngIf="authService.current_user.role_id == appService.userType.teacher"></app-dashboard-teacher>

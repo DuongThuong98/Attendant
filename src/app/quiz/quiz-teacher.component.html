@@ -1,0 +1,239 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Quiz</h3>
+            <div class="navbar-btn">
+                <div class="pull-right">
+                    <select class="form-control" [(ngModel)]="selected_course" (ngModelChange)="onChangeCourse()">
+                        <option *ngFor="let course of courses" [ngValue]="course">{{course.name}}-{{course.class_name}}</option>
+                    </select>
+                </div>
+                <button class="btn btn-round btn-primary pull-right" (click)="onAddQuiz()"><i class="fa fa-plus"></i> Add</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <tabset [justified]="true">
+                <tab heading='Template'>
+                    <accordion>
+                        <ng-container *ngFor="let quiz of quiz_list; let i = index">
+                            <ng-container *ngIf="quiz.is_template">
+                                <accordion-group #group [isOpen]="quiz.isOpen">
+                                    <h4 accordion-heading>
+                                        {{quiz.title}} - {{quiz.created_at | date:'short'}} - {{quiz.questions.length}} questions
+                                        <i class="pull-right float-xs-right fa" [ngClass]="{'fa-chevron-down': group?.isOpen, 'fa-chevron-right': !group?.isOpen}"></i>
+                                    </h4>
+                                    <button class="btn btn-success" (click)="onSaveQuiz(i)"><i class="fa fa-save"></i> Save</button>
+                                    <button class="btn btn-danger" (click)="onDeleteQuiz(quiz.id)"><i class="fa fa-times"></i> Delete</button>
+                                    <div class="container-fluid" *ngFor="let question of quiz.questions; let j = index">
+                                        <form class="form-group well">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <textarea autosize rows="2" class="form-control only_bottom_border" name="question_title_{{i}}" placeholder="Question" [(ngModel)]="question.text" style="resize: none;" (keydown)="onTabInTextarea($event)"></textarea>
+                                                </div>
+                                                <div class="col-sm-4 col-xs-6">
+                                                    <label class="control-label col-sm-3">Timer: </label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" [(ngModel)]="question.timer" name="question_timer_{{j}}">
+                                                            <option *ngFor="let timer of appService.timers" [value]="timer.value">{{timer.text}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-1" *ngIf="quiz.questions.length > 1">
+                                                    <button class="btn btn-danger" (click)="onRemoveTemplateQuestion(i,j)"><i class="fa fa-times"></i></button>
+                                                </div>
+                                                <div class="col-sm-1" *ngIf="j == quiz.questions.length-1">
+                                                    <button class="btn btn-primary" (click)="onAddTemplateQuestion(i)"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-4 col-sm-offset-1">
+                                                    <input class="form-control" name="question_{{j}}_option_a" placeholder="Option A" [(ngModel)]="question.option_a">
+                                                </div>
+                                                <div class="col-sm-1 radio">
+                                                    <label>
+                                                        <input type="radio" name="optradio" [value]="question.option_a" [(ngModel)]="question.correct_option">
+                                                        <p class="green_text" *ngIf="question.option_a == question.correct_option">Correct</p>
+                                                    </label>
+                                                </div>
+                                                <div class="col-sm-4 col-sm-offset-1">
+                                                    <input class="form-control" name="question_{{j}}_option_b" placeholder="Option B" [(ngModel)]="question.option_b">
+                                                </div>
+                                                <div class="col-sm-1 radio">
+                                                    <label>
+                                                        <input type="radio" name="optradio" [value]="question.option_b" [(ngModel)]="question.correct_option">
+                                                        <p class="green_text" *ngIf="question.option_b == question.correct_option">Correct</p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-4 col-sm-offset-1">
+                                                    <input class="form-control" name="question_{{j}}_option_c" placeholder="Option C" [(ngModel)]="question.option_c">
+                                                </div>
+                                                <div class="col-sm-1 radio">
+                                                    <label>
+                                                        <input type="radio" name="optradio" [value]="question.option_c" [(ngModel)]="question.correct_option">
+                                                        <p class="green_text" *ngIf="question.option_c == question.correct_option">Correct</p>
+                                                    </label>
+                                                </div>
+                                                <div class="col-sm-4 col-sm-offset-1">
+                                                    <input class="form-control" name="question_{{j}}_option_d" placeholder="Option D" [(ngModel)]="question.option_d">
+                                                </div>
+                                                <div class="col-sm-1 radio">
+                                                    <label>
+                                                        <input type="radio" name="optradio" [value]="question.option_d" [(ngModel)]="question.correct_option">
+                                                        <p class="green_text" *ngIf="question.option_d == question.correct_option">Correct</p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </accordion-group>
+                            </ng-container>
+                        </ng-container>
+                    </accordion>
+                </tab>
+                <tab heading='Result'>
+                    <accordion>
+                        <ng-container *ngFor="let quiz of quiz_list; let i = index">
+                            <ng-container *ngIf="!quiz.is_template">
+                                <accordion-group #group [isOpen]="quiz.isOpen">
+                                    <h4 accordion-heading>
+                                        {{quiz.title}} - {{quiz.created_at | date:'short'}} - {{quiz.questions.length}} questions
+                                        <i class="pull-right float-xs-right fa" [ngClass]="{'fa-chevron-down': group?.isOpen, 'fa-chevron-right': !group?.isOpen}"></i>
+                                    </h4>
+                                    <button class="btn btn-danger" (click)="onDeleteQuiz(quiz.id)"><i class="fa fa-times"></i> Delete</button>
+                                    <div class="row" *ngFor="let question of quiz.questions">
+                                        <div class="col-sm-8 col-xs-12">
+                                            <h4 style="white-space: pre-wrap"><label class="underline">Q:</label> {{question.text}}</h4>
+                                            <h4 [ngClass]="{'green_text': question.option_a == question.correct_option}">A. {{question.option_a}}</h4>
+                                            <h4 [ngClass]="{'green_text': question.option_b == question.correct_option}">B. {{question.option_b}}</h4>
+                                            <h4 [ngClass]="{'green_text': question.option_c == question.correct_option}">C. {{question.option_c}}</h4>
+                                            <h4 [ngClass]="{'green_text': question.option_d == question.correct_option}">D. {{question.option_d}}</h4>
+                                        </div>
+                                        <div class="col-sm-4 col-xs-12" style="overflow:auto; max-height:300px;">
+                                            <h4><label class="underline">A:</label> {{question.answers.length}} answers</h4>
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                    <tr *ngFor="let answer of question.answers">
+                                                        <td>{{answer.student_name}} - {{answer.student_code}}</td>
+                                                        <td>{{answer.selected_option}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr/>
+                                    </div>
+                                </accordion-group>
+                            </ng-container>
+                        </ng-container>
+                    </accordion>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteQuizModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm Delete Quiz</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="deleteQuiz()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addQuizModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-lg vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add new quiz</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="row modal-body">
+                        <div class="well form-group">
+                            <textarea autosize class="form-control only_bottom_border" placeholder="Quiz title" [(ngModel)]="quiz.title" name="quiz_title" style="font-size: large; resize: none;"></textarea>
+                        </div>
+                        <div *ngFor="let question of quiz.questions; let i = index;">
+                            <form class="form-group well">
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <textarea autosize rows="2" class="form-control only_bottom_border" name="question_title_{{i}}" placeholder="Question" [(ngModel)]="question.text" style="resize: none;" (keydown)="onTabInTextarea($event)"></textarea>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <label class="control-label col-sm-3">Timer: </label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" [(ngModel)]="question.timer" name="question_timer_{{i}}">
+                                                <option *ngFor="let timer of appService.timers" [value]="timer.value">{{timer.text}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1" *ngIf="quiz.questions.length > 1">
+                                        <button class="btn btn-danger" (click)="onRemoveQuestion(i)"><i class="fa fa-times"></i></button>
+                                    </div>
+                                    <div class="col-sm-1" *ngIf="i == quiz.questions.length-1">
+                                    <button class="btn btn-primary" (click)="onAddQuestion(i)"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_a" placeholder="Option A" [(ngModel)]="question.option_a">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_a" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_a == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_b" placeholder="Option B" [(ngModel)]="question.option_b">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_b" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_b == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_c" placeholder="Option C" [(ngModel)]="question.option_c">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_c" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_c == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_d" placeholder="Option D" [(ngModel)]="question.option_d">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_d" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_d == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="addQuiz()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

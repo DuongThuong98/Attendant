@@ -1,0 +1,31 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Statistics Export</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-xs-12">
+                <div class="pad-top">
+                    <button type="button" class="btn btn-primary button_icon_center" (click)="onExportExamineesList()">
+                        <i class="fa fa-address-book-o fa-3x"></i>
+                        <h5 class="button_text">Examinees</h5>
+                    </button>
+                    <button type="button" class="btn btn-primary button_icon_center" (click)="onExportAttendanceSummary()">
+                        <i class="fa fa-percent fa-3x"></i>
+                        <h5 class="button_text">Attendance Summary</h5>
+                    </button>
+                    <button type="button" class="btn btn-primary button_icon_center" (click)="onExportExceededAbsence()">
+                        <i class="fa fa-warning fa-3x"></i>
+                        <h5 class="button_text">Exceeded Absences Limit</h5>
+                    </button>
+                    <button type="button" class="btn btn-primary button_icon_center" (click)="onExportAttendanceLists()">
+                        <i class="fa fa-calendar-check-o fa-3x"></i>
+                        <h5 class="button_text">Attendance Lists</h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<export-modal [export_type]="export_type" [title]="export_title"></export-modal>

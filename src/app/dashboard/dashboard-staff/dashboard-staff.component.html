@@ -1,0 +1,70 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="col-sm-2" style="padding: 0;text-align: center;">
+                <img id="profilePic" style="height:150px;width:150px;padding-bottom: 5px;">
+                <ng-container *ngIf="isEditingProfile">
+                    <label class="btn btn-primary">
+                        Change Picture
+                        <input type="file" style="display:none;" name="uploads" (change)="onEditProfilePic($event)">
+                    </label>  
+                </ng-container>    
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12 profile_left">
+                <ng-container *ngIf="!isEditingProfile">
+                    <h3>{{editing_name}}</h3>
+                    <ul class="list-unstyled user_data" style="font-size: medium;">
+                        <li>
+                            <i class="fa fa-phone"></i> {{authService.current_user.phone}}
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope-o"></i> {{authService.current_user.email}}
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" (click)="onEditProfile()"><i class="fa fa-pencil"></i> Edit</button>
+                </ng-container>
+                <ng-container *ngIf="isEditingProfile" (keydown)="keyDownFunction($event)">
+                    <h3><input class="form-control" type="text" name="editing_name" [(ngModel)] = "editing_name"></h3>
+                    <ul class="list-unstyled user_data" style="font-size: medium;">
+                        <li>
+                            <i class="fa fa-phone"></i>
+                            <input class="form-control" type="text" name="editing_phone" [(ngModel)]="editing_phone">
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope-o"></i>
+                            <input class="form-control" type="text" name="editing_mail" [(ngModel)]="editing_mail">
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" (click)="onCancelEditProfile()">Cancel</button>
+                    <button class="btn btn-success" (click)="onSaveEditProfile()">Save</button>
+                </ng-container>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <div class="pad-top">
+                    <button type="button" class="btn btn-primary" (click)="onChangePassword()">
+                        <i class="fa fa-cogs fa-3x"></i>
+                        <h5>Change Password</h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="progressModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h2>Loading</h2>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

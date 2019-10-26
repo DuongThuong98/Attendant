@@ -1,0 +1,168 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Check Attendance Quiz ({{selected_attendance['course_name']}}-{{selected_attendance['class_name']}})</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-xs-12 form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-1 col-xs-6">Quiz type: </label>
+                    <div class="col-sm-3 col-xs-6">
+                        <select class="form-control" name="selected_quiz_type" [(ngModel)]="selected_quiz_type" (ngModelChange)="onChangeQuizType()">
+                            <option *ngFor="let quiz_type of quiz_types" [value]="quiz_type.id">{{quiz_type.title}}</option>
+                        </select>
+                    </div>
+                    <ng-container *ngIf="selected_quiz_type == appService.quiz_type.academic.id">
+                        <label class="control-label col-sm-2 col-xs-6">Quiz template: </label>
+                        <div class="col-sm-3 col-xs-6">
+                            <select class="form-control" name="selected_quiz" [(ngModel)]="selected_quiz" (ngModelChange)="onChangeQuiz()">
+                                <option *ngFor="let quiz of quizzes" [value]="quiz.id">{{quiz.title}}</option>
+                            </select>
+                        </div>
+                        <ng-container *ngIf="selected_quiz != 0">
+                            <div class="col-sm-3 col-xs-6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="is_edit_quiz" [(ngModel)]="is_edit_quiz"> Edit quiz?
+                                    </label>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="selected_quiz_type == appService.quiz_type.miscellaneous.id">
+                        <div class="col-sm-1 col-xs-6">
+                            <ng-template #tolTemplate>
+                                <div>Miscellaneous Quiz requires students to have 100% correct answers for their attendance to be checked</div>
+                            </ng-template>
+                            <i class="fa fa-question-circle fa-2x" [tooltip]="tolTemplate" container="body"></i>
+                        </div>
+                        <label class="control-label col-sm-2 col-xs-4">No. questions: </label>
+                        <div class="col-sm-2 col-xs-4">
+                            <input class="form-control" name="number_questions" [(ngModel)]="number_misc_question">
+                        </div>
+                        <div class="col-sm-3 col-xs-4">
+                            <button class="btn btn-primary btn-round" (click)="generateMiscQuestion()">Generate questions</button>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-6">
+                        <textarea autosize class="form-control only_bottom_border" placeholder="Quiz title" [(ngModel)]="quiz.title" style="font-size: large; resize: none;"></textarea>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-1 col-xs-offset-2">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="is_randomize_questions" [(ngModel)]="quiz.is_randomize_questions">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <h4>Randomimze order of questions</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-1 col-xs-offset-2">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="is_randomize_answers" [(ngModel)]="quiz.is_randomize_answers">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <h4>Randomize order of answers</h4>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="selected_quiz_type == appService.quiz_type.academic.id">
+                                    <div class="col-xs-2 col-xs-offset-1">
+                                        <input class="form-control" type="text" name="required_correct_answers" [(ngModel)]="quiz.required_correct_answers">
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <h4>No. required correct answers</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <ng-container *ngIf="selected_quiz_type == appService.quiz_type.miscellaneous.id || is_edit_quiz">
+                        <div *ngFor="let question of quiz.questions; let i = index;">
+                            <form class="form-group well">
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <textarea autosize rows="2" class="form-control only_bottom_border" name="question_title_{{i}}" placeholder="Question" [(ngModel)]="question.text" style="resize: none;" (keydown)="onTabInTextarea($event)"></textarea>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-6">
+                                        <label class="control-label col-sm-3">Timer: </label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" [(ngModel)]="question.timer" name="question_timer_{{i}}">
+                                                <option *ngFor="let timer of appService.timers" [value]="timer.value">{{timer.text}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1" *ngIf="quiz.questions.length > 1">
+                                        <button class="btn btn-danger" (click)="onRemoveQuestion(i)"><i class="fa fa-times"></i></button>
+                                    </div>
+                                    <div class="col-sm-1" *ngIf="i == quiz.questions.length-1">
+                                        <button class="btn btn-primary" (click)="onAddQuestion()"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_a" placeholder="Option A" [(ngModel)]="question.option_a">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_a" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_a == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_b" placeholder="Option B" [(ngModel)]="question.option_b">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_b" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_b == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_c" placeholder="Option C" [(ngModel)]="question.option_c">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_c" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_c == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <input class="form-control" name="question_{{i}}_option_d" placeholder="Option D" [(ngModel)]="question.option_d">
+                                    </div>
+                                    <div class="col-sm-1 radio">
+                                        <label>
+                                            <input type="radio" name="optradio" [value]="question.option_d" [(ngModel)]="question.correct_option">
+                                            <p class="green_text" *ngIf="question.option_d == question.correct_option">Correct</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <button class="btn btn-default" (click)="onBack()">Back</button>
+                        <button class="btn btn-success" (click)="onPublishQuiz()">Publish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

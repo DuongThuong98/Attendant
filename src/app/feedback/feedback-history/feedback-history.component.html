@@ -1,0 +1,102 @@
+<div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Feedback History</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-3">
+                    <input placeholder="Search" class="form-control" [(ngModel)]="search_text" (ngModelChange)="onSearchChange()" />
+                </div>
+                <div class="col-xs-3" *ngIf="authService.current_user.role_id == appService.userType.teacher">
+                    <select class="form-control" [(ngModel)]="from_to" (ngModelChange)="getFeedbacks()">
+                        <option *ngFor="let from_to of from_tos" [value]="from_to.id">{{from_to.title}}</option>
+                    </select>
+                </div>
+                <div class="col-xs-2">
+                    <select class="form-control" [(ngModel)]="selected_category" (ngModelChange)="getFeedbacks()">
+                        <option *ngFor="let category of appService.feedback_categories" [value]="category.id">{{category.title}}</option>
+                    </select>
+                </div>
+                <div class="col-xs-2" *ngIf="from_to == 1">
+                    <select class="form-control" [(ngModel)]="selected_status" (ngModelChange)="getFeedbacks()">
+                        <option *ngFor="let status of appService.feedback_status" [value]="status.id">{{status.title}}</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" (click)="onSendFeedback()"><i class="fa fa-plus"></i> Send Feedback</button>
+            </div>
+            <br/>
+            <table *ngIf="from_to == 1" class="table table-bordered text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>From</th>
+                        <th>Submited At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let feedback of feedbacks; let i = index" (click)="onClickFeedback(i)">
+                        <td>{{feedback.title}}</td>
+                        <td>{{feedback.from}}</td>
+                        <td>{{feedback.created_at | date: 'shortDate'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table *ngIf="from_to == 0" class="table table-bordered text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th *ngIf="authService.current_user.role_id == appService.userType.student">To</th>
+                        <th>Submited At</th>
+                        <th>Status</th>
+                        <th>Replied</th>
+                        <th>Replied At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let feedback of feedbacks; let i = index" (click)="onClickFeedback(i)">
+                        <td>{{feedback.title}}</td>
+                        <td *ngIf="authService.current_user.role_id == appService.userType.student">{{feedback._to}}</td>
+                        <td>{{feedback.created_at | date: 'shortDate'}}</td>
+                        <td><span *ngIf="feedback.read == false" style="color: red">Pending</span><span *ngIf="feedback.read" style="color: green">Seen</span></td>
+                        <td><span *ngIf="feedback.replied" style="color: green">Replied</span></td>
+                        <td><span *ngIf="feedback.replied_at" style="color: green">{{feedback.replied_at | date:'shortDate'}}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [(ngModel)]="currentPage" (pageChanged)="onPageChanged($event)" class="pull-right no_margin"></pagination>
+            <div class="form-group">
+                <select [(ngModel)]="itemsPerPage" (ngModelChange)="getFeedbacks()">
+                    <option>10</option>
+                    <option>30</option>
+                    <option>50</option>
+                </select>
+                <span>Items/page</span>
+            </div>
+        </div>
+    </div>
+</div>
+<send-feedback-modal (onSent)="onFeedbackSent($event)"></send-feedback-modal>
+<div class="modal fade" id="feedbackDetailModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Feedback Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Title:</label> {{feedback_title}}<br>
+                    <label>Category:</label> {{feedback_category}}<br>
+                    <label>Content:</label> {{feedback_content}}<br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" (click)="deleteFeedback()">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

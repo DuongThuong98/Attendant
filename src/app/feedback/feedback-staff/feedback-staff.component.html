@@ -1,0 +1,82 @@
+<div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Feedbacks</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-4">
+                    <input placeholder="Search" class="form-control" [(ngModel)]="search_text" (ngModelChange)="onSearchChange()" />
+                </div>
+                <div class="col-xs-2">
+                    <select class="form-control" [(ngModel)]="selected_category" (ngModelChange)="getFeedbacks()">
+                        <option *ngFor="let category of appService.feedback_categories" [value]="category.id">{{category.title}}</option>
+                    </select>
+                </div>
+                <div class="col-xs-2">
+                    <select class="form-control" [(ngModel)]="selected_role" (ngModelChange)="getFeedbacks()">
+                        <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                    </select>
+                </div>
+                <div class="col-xs-2">
+                    <select class="form-control" [(ngModel)]="selected_status" (ngModelChange)="getFeedbacks()">
+                        <option *ngFor="let status of appService.feedback_status" [value]="status.id">{{status.title}}</option>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Title</th>
+                        <th>Submited At</th>
+                        <th>Replied</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let feedback of feedbacks; let i = index" (click)="onClickFeedback(i)" [ngClass]="{'new_feedback':!feedback.read}">
+                        <td>{{feedback._from}}</td>
+                        <td>{{feedback.title}}</td>
+                        <td>{{feedback.created_at | date: 'dd/MM/yyyy'}}</td>
+                        <td><span *ngIf="feedback.replied" style="color: green">Replied</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [(ngModel)]="currentPage" (pageChanged)="onPageChanged($event)" class="pull-right no_margin"></pagination>
+            <div class="form-group">
+                <select [(ngModel)]="itemsPerPage" (ngModelChange)="getFeedbacks()">
+                    <option>10</option>
+                    <option>30</option>
+                    <option>50</option>
+                </select>
+                <span>Items/page</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="feedbackDetailModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Reply Feedback</h4>
+                </div>
+                <div class="modal-body">
+                    <label>From:</label> {{feedback_from}}<br>
+                    <label>Title:</label> {{feedback_title}}<br>
+                    <label>Content:</label> {{feedback_content}}<br> 
+                    <label *ngIf="feedback_from != 'Anonymous'">Reply: </label>
+                    <textarea rows="3" *ngIf="feedback_from != 'Anonymous'" [(ngModel)]="reply_content" autosize class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button *ngIf="feedback_from != 'Anonymous'" type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendReply()">Reply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

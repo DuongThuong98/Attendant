@@ -1,0 +1,126 @@
+<div class="modal fade" id="{{modal_id}}" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-lg vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{modal_title}}</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs" *ngIf="classes.length > 1">
+                          <li *ngFor="let class of classes; let i = index" [ngClass]="{'active': i == current_class_id}" (click)="onChangeClass(i)"><a>{{class.class_name}}</a></li>
+                        </ul>
+                        <table class="table table-bordered text-center" style="font-weight: bold">
+                            <thead class="text-center">
+                                <tr>
+                                    <th width="15%"> </th>
+                                    <th width="12%">2</th>
+                                    <th width="12%">3</th>
+                                    <th width="12%">4</th>
+                                    <th width="12%">5</th>
+                                    <th width="12%">6</th>
+                                    <th width="12%">7</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>(LT)7:30-9:10 <br> (TH)7:30-9:30</strong></td>
+                                    <td *ngIf="sessions[current_class_id][0].room" (click)="onCellClick(0)">{{sessions[current_class_id][0].room}} - {{sessions[current_class_id][0].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][0].room" (click)="onCellClick(0)"></td>
+                                    <td *ngIf="sessions[current_class_id][4].room" (click)="onCellClick(4)">{{sessions[current_class_id][4].room}} - {{sessions[current_class_id][4].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][4].room" (click)="onCellClick(4)"></td>
+                                    <td *ngIf="sessions[current_class_id][8].room" (click)="onCellClick(8)">{{sessions[current_class_id][8].room}} - {{sessions[current_class_id][8].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][8].room" (click)="onCellClick(8)"></td>
+                                    <td *ngIf="sessions[current_class_id][12].room" (click)="onCellClick(12)">{{sessions[current_class_id][12].room}} - {{sessions[current_class_id][12].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][12].room" (click)="onCellClick(12)"></td>
+                                    <td *ngIf="sessions[current_class_id][16].room" (click)="onCellClick(16)">{{sessions[current_class_id][16].room}} - {{sessions[current_class_id][16].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][16].room" (click)="onCellClick(16)"></td>
+                                    <td *ngIf="sessions[current_class_id][20].room" (click)="onCellClick(20)">{{sessions[current_class_id][20].room}} - {{sessions[current_class_id][20].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][20].room" (click)="onCellClick(20)"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(LT)9:30-11:10 <br> (TH)9:30-11:30</strong></td>
+                                    <td *ngIf="sessions[current_class_id][1].room" (click)="onCellClick(1)">{{sessions[current_class_id][1].room}} - {{sessions[current_class_id][1].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][1].room" (click)="onCellClick(1)"></td>
+                                    <td *ngIf="sessions[current_class_id][5].room" (click)="onCellClick(5)">{{sessions[current_class_id][5].room}} - {{sessions[current_class_id][5].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][5].room" (click)="onCellClick(5)"></td>
+                                    <td *ngIf="sessions[current_class_id][9].room" (click)="onCellClick(9)">{{sessions[current_class_id][9].room}} - {{sessions[current_class_id][9].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][9].room" (click)="onCellClick(9)"></td>
+                                    <td *ngIf="sessions[current_class_id][13].room" (click)="onCellClick(13)">{{sessions[current_class_id][13].room}} - {{sessions[current_class_id][13].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][13].room" (click)="onCellClick(13)"></td>
+                                    <td *ngIf="sessions[current_class_id][17].room" (click)="onCellClick(17)">{{sessions[current_class_id][17].room}} - {{sessions[current_class_id][17].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][17].room" (click)="onCellClick(17)"></td>
+                                    <td *ngIf="sessions[current_class_id][21].room" (click)="onCellClick(21)">{{sessions[current_class_id][21].room}} - {{sessions[current_class_id][21].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][21].room" (click)="onCellClick(21)"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(LT)13:30-15:10 <br> (TH)13:30-15:30</strong></td>
+                                    <td *ngIf="sessions[current_class_id][2].room" (click)="onCellClick(2)">{{sessions[current_class_id][2].room}} - {{sessions[current_class_id][2].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][2].room" (click)="onCellClick(2)"></td>
+                                    <td *ngIf="sessions[current_class_id][6].room" (click)="onCellClick(6)">{{sessions[current_class_id][6].room}} - {{sessions[current_class_id][6].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][6].room" (click)="onCellClick(6)"></td>
+                                    <td *ngIf="sessions[current_class_id][10].room" (click)="onCellClick(10)">{{sessions[current_class_id][10].room}} - {{sessions[current_class_id][10].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][10].room" (click)="onCellClick(10)"></td>
+                                    <td *ngIf="sessions[current_class_id][14].room" (click)="onCellClick(14)">{{sessions[current_class_id][14].room}} - {{sessions[current_class_id][14].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][14].room" (click)="onCellClick(14)"></td>
+                                    <td *ngIf="sessions[current_class_id][18].room" (click)="onCellClick(18)">{{sessions[current_class_id][18].room}} - {{sessions[current_class_id][18].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][18].room" (click)="onCellClick(18)"></td>
+                                    <td *ngIf="sessions[current_class_id][22].room" (click)="onCellClick(22)">{{sessions[current_class_id][22].room}} - {{sessions[current_class_id][22].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][22].room" (click)="onCellClick(22)"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(LT)15:30-17:10 <br> (TH)15:30-17:30</strong></td>
+                                    <td *ngIf="sessions[current_class_id][3].room" (click)="onCellClick(3)">{{sessions[current_class_id][3].room}} - {{sessions[current_class_id][3].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][3].room" (click)="onCellClick(3)"></td>
+                                    <td *ngIf="sessions[current_class_id][7].room" (click)="onCellClick(7)">{{sessions[current_class_id][7].room}} - {{sessions[current_class_id][7].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][7].room" (click)="onCellClick(7)"></td>
+                                    <td *ngIf="sessions[current_class_id][11].room" (click)="onCellClick(11)">{{sessions[current_class_id][11].room}} - {{sessions[current_class_id][11].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][11].room" (click)="onCellClick(11)"></td>
+                                    <td *ngIf="sessions[current_class_id][15].room" (click)="onCellClick(15)">{{sessions[current_class_id][15].room}} - {{sessions[current_class_id][15].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][15].room" (click)="onCellClick(15)"></td>
+                                    <td *ngIf="sessions[current_class_id][19].room" (click)="onCellClick(19)">{{sessions[current_class_id][19].room}} - {{sessions[current_class_id][19].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][19].room" (click)="onCellClick(19)"></td>
+                                    <td *ngIf="sessions[current_class_id][23].room" (click)="onCellClick(23)">{{sessions[current_class_id][23].room}} - {{sessions[current_class_id][23].type}}</td>
+                                    <td *ngIf="!sessions[current_class_id][23].room" (click)="onCellClick(23)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group" *ngIf="editingCellIndex != -1 && !view_only">
+                            <label class="control-label col-sm-1 col-xs-6"> Room:</label>
+                            <div class="col-sm-3 col-xs-6">
+                                <input id="roomInput" class="form-control col-md-7 col-xs-12" name="room" [(ngModel)]="temp_room">
+                            </div>
+                            <label class="control-label col-sm-1 col-xs-6"> Type:</label>
+                            <div class="col-sm-2 col-xs-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio" [(ngModel)]="temp_type" [value]="'LT'" [checked]="temp_type == 'LT'">LT</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optradio" [(ngModel)]="temp_type" [value]="'TH'" [checked]="temp_type == 'TH'">TH</label>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <button type="button" class="btn btn-default" (click)="onCancelCell()">Cancel</button>
+                                <button type="button" class="btn btn-danger" (click)="onRemoveCell()">Remove</button>
+                                <button type="button" class="btn btn-success" (click)="onUpdateCell()">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!view_only" class="modal-footer">
+                        <button type="button" class="btn btn-default" (click)="onCancelModal()">Cancel</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="onSaveModal()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

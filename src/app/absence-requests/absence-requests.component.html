@@ -1,0 +1,2 @@
+<app-absence-requests-staff *ngIf="authService.current_user.role_id == appService.userType.staff || authService.current_user.role_id == appService.userType.admin"></app-absence-requests-staff>
+<app-absence-requests-student *ngIf="authService.current_user.role_id == appService.userType.student"></app-absence-requests-student>

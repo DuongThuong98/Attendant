@@ -1,0 +1,64 @@
+<div class="col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Absence Requests</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="row">
+                <div class="col-xs-4">
+                    <input placeholder="Search Code/Name" class="form-control" [(ngModel)]="search_text" (ngModelChange)="onSearchChange()" />
+                </div>
+                <div class="col-xs-3">
+                    <select class="form-control" [(ngModel)]="selectedStatus" (ngModelChange)="onChangeStatus()">
+                        <option *ngFor="let status of absence_request_status" [value]="status.id">{{status.title}}</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" (click)="onCreateRequest()"><i class="fa fa-plus"></i> Send request</button>
+            </div>
+            <br/>
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>Reason</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Submited At</th>
+                        <th>Accepted/Rejected At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let request of absence_requests">
+                        <td>{{request.reason}}</td>
+                        <td>{{request.start_date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{request.end_date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{request.created_at | date: 'short'}}</td>
+                        <td *ngIf="request.status == appService.absence_request_status.new.id"></td>
+                        <td *ngIf="request.status != appService.absence_request_status.new.id">{{request.updated_at | date: 'short'}}</td>
+                        <td *ngIf="request.status == appService.absence_request_status.new.id"><button class="btn btn-danger btn-sm" (click)="onCancelRequest(request.id)">Cancel</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<create-absence-request-modal (onConfirmed)="onRequestCreated($event)"></create-absence-request-modal>
+<div class="modal fade" id="confirmModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{confirm_modal_title}}</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="confirmAction()" data-dismiss="modal">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

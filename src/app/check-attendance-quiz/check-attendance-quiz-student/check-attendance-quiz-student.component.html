@@ -1,0 +1,142 @@
+<div class="modal fade" id="quizModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-lg vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 *ngIf="!is_ended" class="modal-title pull-right">Question {{current_question_index + 1}} of {{quiz['questions']['length']}}</h2>
+                    <button *ngIf="is_ended" class="modal-title pull-right btn btn-lg btn-primary" (click)="onReturn()">Return</button>
+                    <h2 class="modal-title">{{quiz['title']}} - <ng-container *ngIf="quiz['type'] == appService.quiz_type.academic.id">{{appService.quiz_type.academic.title}}</ng-container><ng-container *ngIf="quiz['type'] == appService.quiz_type.miscellaneous.id">{{appService.quiz_type.miscellaneous.title}}</ng-container></h2>
+                </div>
+                <div class="modal-body container-fluid">
+                    <div *ngIf="!is_started && !is_ended  && !is_ready" class="row">
+                        <div class="col-xs-12 text-center">
+                            <h2>You joined the quiz. Wait for your teacher to start</h2>
+                        </div>
+                    </div>
+                    <div  *ngIf="is_started && !is_ended  && !is_ready" class="container-fluid">
+                        <ng-container *ngIf="!is_answered">
+                            <div class="row">
+                                <button class="col-xs-5 btn btn-primary" (click)="onClickAnswer('A')">
+                                    <h1>A.</h1>
+                                </button>
+                                <button class="col-xs-5 col-xs-offset-1 btn btn-primary" (click)="onClickAnswer('B')">
+                                    <h1>B.</h1>
+                                </button>
+                            </div>
+                            <div class="row">
+                                <button class="col-xs-5 btn btn-primary" (click)="onClickAnswer('C')">
+                                    <h1>C.</h1>
+                                </button>
+                                <button class="col-xs-5 col-xs-offset-1 btn btn-primary" (click)="onClickAnswer('D')">
+                                    <h1>D.</h1>
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="is_answered">
+                            <div class="row">
+                                <button disabled *ngIf="selected_option == 'a'" class="col-xs-5 btn btn-success"><h1>A</h1></button>
+                                <button disabled *ngIf="selected_option != 'a'" class="col-xs-5 btn btn-primary"><h1>A</h1></button>
+                                <button disabled *ngIf="selected_option == 'b'" class="col-xs-5 col-xs-offset-1 btn btn-success"><h1>B</h1></button>
+                                <button disabled *ngIf="selected_option != 'b'" class="col-xs-5 col-xs-offset-1 btn btn-primary"><h1>B</h1></button>
+                            </div>
+                            <div class="row">
+                                <button disabled *ngIf="selected_option == 'c'" class="col-xs-5 btn btn-success"><h1>C</h1></button>
+                                <button disabled *ngIf="selected_option != 'c'" class="col-xs-5 btn btn-primary"><h1>C</h1></button>
+                                <button disabled *ngIf="selected_option == 'd'" class="col-xs-5 col-xs-offset-1 btn btn-success"><h1>D</h1></button>
+                                <button disabled *ngIf="selected_option != 'd'" class="col-xs-5 col-xs-offset-1 btn btn-primary"><h1>D</h1></button>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div *ngIf="!is_started && !is_ended  && is_ready" class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-8 col-xs-offset-2">
+                                <h3>Ready for the next question</h3>
+                                <div class="progress" style="">
+                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" [ngStyle]="{ 'width': ready_progress + '%' }"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!is_started && is_ended  && !is_ready" class="row">
+                        <div class="row text-center">
+                            <h2>You've finished the quiz</h2>
+                        </div>
+                        <div class="row text-center">
+                            <h2>Result: {{correct_answers}} out of {{quiz['questions']['length']}}</h2>
+                        </div>
+                        <div *ngIf="no_answer" class="row text-center red_text">
+                            <h2>Your Attendance is not checked. You didn't answer any question.</h2>
+                        </div>
+                        <ng-container *ngIf="!no_answer">
+                            <div *ngIf="quiz['type'] == appService.quiz_type.academic.id || correct_answers == quiz['questions']['length']" class="row text-center green_text">
+                                <h2>Your Attendance is checked</h2>
+                            </div>
+                            <div *ngIf="quiz['type'] == appService.quiz_type.academic.id && correct_answers < quiz.required_correct_answers" class="row text-center red_text">
+                                <h2>Your Attendance is not checked. This quiz requires you to have at least {{quiz.required_correct_answers}} correct answers</h2>
+                            </div>
+                            <div *ngIf="quiz['type'] == appService.quiz_type.miscellaneous.id && correct_answers != quiz['questions']['length']" class="row text-center red_text">
+                                <h2>Your Attendance is not checked. Miscellaneous quiz requires you to be 100% correct to be checked</h2>
+                            </div>
+                        </ng-container>
+                        <div class="container-fluid">
+                            <ng-container *ngFor="let question of this.quiz.questions">
+                                <div class="row">
+                                    <div>
+                                        <h4 style="white-space: pre-wrap"><label class="underline">Q:</label>{{question.text}}</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div><h4 [ngClass]="{'green_text': question['answers'] == 'a'}">A. {{question.option_a}} <i *ngIf="question['option_a'] != question['correct_option']" class="fa fa-times red"></i><i *ngIf="question['option_a'] == question['correct_option']" class="fa fa-check green"></i></h4></div>
+                                </div>
+                                <div class="row">
+                                    <div><h4 [ngClass]="{'green_text': question['answers'] == 'b'}">B. {{question.option_b}} <i *ngIf="question['option_b'] != question['correct_option']" class="fa fa-times red"></i><i *ngIf="question['option_b'] == question['correct_option']" class="fa fa-check green"></i></h4></div>
+                                </div>
+                                <div class="row">
+                                    <div><h4 [ngClass]="{'green_text': question['answers'] == 'c'}">C. {{question.option_c}} <i *ngIf="question['option_c'] != question['correct_option']" class="fa fa-times red"></i><i *ngIf="question['option_c'] == question['correct_option']" class="fa fa-check green"></i></h4></div>
+                                </div>
+                                <div class="row">
+                                    <div><h4 [ngClass]="{'green_text': question['answers'] == 'd'}">D. {{question.option_d}} <i *ngIf="question['option_d'] != question['correct_option']" class="fa fa-times red"></i><i *ngIf="question['option_d'] == question['correct_option']" class="fa fa-check green"></i></h4></div>
+                                </div>
+                                <hr/>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="quizStoppedModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{stopped_modal_message}}</h4>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="router.navigate(['/dashboard'])">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="enterQuizCodeModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content" (keydown)="keyDownFunction($event)">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter Quiz Code</h4>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" type="text" [(ngModel)]="quiz_code">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" (click)="cancelCheckQuizCode()">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="checkQuizCode()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

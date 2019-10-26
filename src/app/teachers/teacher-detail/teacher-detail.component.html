@@ -1,0 +1,71 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div *ngIf="teacher_not_found" class="x_panel">
+        <div class="x_title">
+            <h3 class="course_title">Teacher not found</h3>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div *ngIf="!teacher_not_found" class="x_panel">
+        <div class="x_content">
+            <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                <img id="profilePic" style="height:150px;width:150px;padding-bottom: 5px;" [src]="teacher.avatar">
+                <ng-container *ngIf="!isEditingTeacher">
+                    <h3>{{editing_name}}</h3>
+                    <ul class="list-unstyled user_data" style="font-size: medium;">
+                        <li>
+                            <i class="fa fa-phone user-profile-icon"></i> {{teacher.phone}}
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope-o user-profile-icon"></i> {{teacher.email}}
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" (click)="onEditTeacher()"><i class="fa fa-pencil"></i> Edit</button>
+                </ng-container>
+                <ng-container *ngIf="isEditingTeacher">
+                    <h3><input class="form-control" type="text" name="editing_name" [(ngModel)] = "editing_name"></h3>
+                    <ul class="list-unstyled user_data" style="font-size: medium;">
+                        <li>
+                            <i class="fa fa-phone"></i>
+                            <input class="form-control" type="text" name="editing_phone" [(ngModel)]="editing_phone">
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope-o"></i>
+                            <input class="form-control" type="text" name="editing_mail" [(ngModel)]="editing_mail">
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" (click)="onCancelEditTeacher()">Cancel</button>
+                    <button class="btn btn-success" (click)="onSaveEditTeacher()">Save</button>
+                </ng-container>
+                <br />
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <tabset>
+                    <tab heading='Current Courses'>
+                        <table class="data table text-center table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Class</th>
+                                    <th>Semester</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let course of teaching_courses" (click)="onCellClick(course.id)">
+                                    <td>{{course.course_code}}</td>
+                                    <td>{{course.course_name}}</td>
+                                    <td *ngIf="course.teacher_role">TA</td>
+                                    <td *ngIf="!course.teacher_role">Lecturer</td>
+                                    <td>{{course.class_name}}</td>
+                                    <td>{{course.semester_name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<result-message-modal [modal_title]="apiResult" [modal_message]="apiResultMessage"></result-message-modal>

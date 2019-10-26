@@ -1,0 +1,29 @@
+<div class="modal fade" id="mapModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{title}}</h4>
+                </div>
+                <div class="modal-body">
+                    <agm-map #map [latitude]="lat"
+                    [longitude]="lng"
+                    [zoom]="zoom"
+                    [disableDefaultUI]="false">
+                        <agm-marker 
+                        *ngFor="let m of markers; let i = index"
+                        [latitude]="m.lat"
+                        [longitude]="m.lng">
+                        <agm-info-window>
+                            <strong>{{m.label}}</strong>
+                          </agm-info-window>
+                        </agm-marker>
+                    </agm-map>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" (click)="onCloseMap()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

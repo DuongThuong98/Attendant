@@ -1,0 +1,81 @@
+<div>
+    <div class="login_wrapper" style="margin: 3% auto 0">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form *ngIf="!reset_token">
+                    <div>
+                        <div class="panel panel-default">
+                            <div class="panel-body">Token is required to setup your account for the first time.</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+                <form *ngIf="reset_token">
+                    <h1>Enter information</h1>
+                    <div *ngIf="error_message" class="alert alert-danger text-center" style="padding-top: 6px;padding-bottom: 6px">
+                        <i class="fa fa-warning"></i> {{error_message}}
+                    </div>
+                    <div *ngIf="success_message" class="alert alert-success text-center" style="padding-top: 6px;padding-bottom: 6px">
+                        {{success_message}}
+                    </div>
+                    <div *ngIf="register_check == 'failure'">
+                        <div>
+                            <button class="btn btn-default" (click)="continue()">Back to login</button>
+                        </div>
+                    </div>
+                    <div *ngIf="register_check == 'success'">
+                        <div>
+                            <input type='text' class="form-control" name="first_name" placeholder="First Name" [(ngModel)]="first_name" />
+                        </div>
+                        <div>
+                            <input type='text' class="form-control" name="last_name" placeholder="Last Name" [(ngModel)]="last_name" />
+                        </div>
+                        <div>
+                            <input type='text' class="form-control" name="phone" placeholder="Phone" [(ngModel)]="phone" />
+                        </div>
+                        <div>
+                            <label class="control-label">Your username will be the part before '@' in your email.</label>
+                        </div>
+                        <div>
+                            <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="password" />
+                        </div>
+                        <div>
+                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" [(ngModel)]="confirm_password" />
+                        </div>
+                        <div style="padding: 0;text-align: center;">
+                            <img id="profilePic" style="height:100px;width:100px;padding-bottom: 5px;">
+                            <ng-container>
+                                <label class="btn btn-default">
+                                    Upload your avatar
+                                    <input type="file" style="display:none;" name="uploads" (change)="onEditProfilePic($event)">
+                                </label>  
+                            </ng-container>    
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" (click)="onRegister()">Confirm</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="progressModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h2>Loading</h2>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

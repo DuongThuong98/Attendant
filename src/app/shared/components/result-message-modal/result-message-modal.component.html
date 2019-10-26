@@ -1,0 +1,25 @@
+<div class="modal fade" id="resultMessageModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{modal_title}}</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div *ngIf="modal_title == 'failure'" class="alert-danger alert text-center">
+                                {{modal_message}}
+                            </div>
+                            <div *ngIf="modal_title == 'success'" class="alert-success alert text-center">
+                                {{modal_message}}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

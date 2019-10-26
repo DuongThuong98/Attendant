@@ -1,0 +1,222 @@
+<div class="col-md-12">
+    <div *ngIf="course_not_found" class="x_panel">
+        <div class="x_title">
+            <h3 class="course_title">Course not found</h3>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div *ngIf="!course_not_found" class="x_panel">
+        <div class="x_title">
+            <h3 class="course_title">{{course['code']}} - {{course['name']}} ({{course['semester_name']}})</h3>
+            <div class="pull-right">
+                <button *ngIf="!course['not_in_current_course']" type="button" class="btn btn-success btn-round navbar-btn" (click)="onEditCourse()"> <i class="fa fa-pencil"></i> Edit Course</button>
+                <button type="button" class="btn btn-success btn-round navbar-btn" (click)="onOpenSchedule()"> <i class="fa fa-calendar"></i> Schedule</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-xs-2" style="text-align: right">
+                        <h4>Lecturer :</h4>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4 *ngFor="let lecturer of lecturers"><a href="/teachers/{{lecturer.id}}">{{lecturer.first_name}} {{lecturer.last_name}}</a></h4>
+                    </div>
+                    <div class="col-xs-1" style="text-align: right">
+                        <h4>TAs :</h4>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4 *ngFor="let TA of TAs"><a href="/teachers/{{TA.id}}">{{TA.first_name}} {{TA.last_name}}</a></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="course['office_hour']" class="col-xs-2" style="text-align: right">
+                        <h4>Office hour :</h4>
+                    </div>
+                    <div *ngIf="course['office_hour']" class="col-xs-2">
+                        <h4>{{course['office_hour']}}</h4>
+                    </div>
+                    <div *ngIf="course['note']" class="col-xs-2" style="text-align: right">
+                        <h4>Note :</h4>
+                    </div>
+                    <div *ngIf="course['note']" class="col-xs-6">
+                        <h4>{{course['note']}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2" style="text-align: right;">
+                        <h4>Total Students :</h4>
+                    </div>
+                    <div class="col-xs-2">
+                        <h4 *ngFor="let class_course of class_has_course">{{class_course.total_stud}} ({{class_course.class_name}})</h4>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div>
+                <div class="pull-right">
+                    <button *ngIf="!course['not_in_current_course'] && !isEdittingAttendance" type="button" class="btn btn-primary btn-round" (click)="onEditAttendance()"> <i class="fa fa-pencil"></i> Edit Attendance</button>
+                    <button type="button" class="btn btn-primary btn-round" (click)="onMapAttendanceList()"> <i class="fa fa-map"></i> Map</button>
+                    <button *ngIf="isEdittingAttendance" type="button" class="btn btn-primary btn-round" (click)="onImportAttendanceList()"> <i class="fa fa-upload"></i> Import</button>
+                    <button type="button" class="btn btn-primary btn-round" (click)="onExportAttendanceList()"> <i class="fa fa-download"></i> Export</button>
+                    <button type="button" class="btn btn-primary btn-round" (click)="onTemplateAttendanceList()"> <i class="fa fa-download"></i> Template</button>
+                </div>
+                <ul class="nav nav-tabs" *ngIf="class_has_course.length > 1">
+                      <li *ngFor="let class of class_has_course; let i = index" [ngClass]="{'active': i == selected_class_index}" (click)="onChangeClass(i)"><a>{{class.class_name}}</a></li>
+                </ul>
+            </div>
+
+            <div *ngIf="!isEdittingAttendance">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th colspan="2">Week 1</th>
+                            <th colspan="2">Week 2</th>
+                            <th colspan="2">Week 3</th>
+                            <th colspan="2">Week 4</th>
+                            <th colspan="2">Week 5</th>
+                            <th colspan="2">Week 6</th>
+                            <th colspan="2">Week 7</th>
+                            <th colspan="2">Week 8</th>
+                            <th colspan="2">Week 9</th>
+                            <th colspan="2">Week 10</th>
+                            <th colspan="2">Week 11</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let attendance of attendance_list;let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{attendance.code}}</td>
+                            <td>{{attendance.name}}</td>
+                            <ng-container *ngIf="attendance.exemption">
+                                <td class="gray_background" colspan="22" style="font-weight: bold;">Exempted</td>
+                            </ng-container>
+                            <ng-container *ngIf="!attendance.exemption">
+                                <ng-container *ngFor="let attendance_detail of attendance.attendance_details;let j = index">
+                                    <ng-template #tolTemplate>
+                                        <div>Method : {{attendance_detail.method}}</div>
+                                        <div>Created at : {{attendance_detail.created_at | date:'short'}}</div>
+                                        <div>Edited at : {{attendance_detail.attendance_time | date:'short'}}</div>
+                                        <div *ngIf="attendance_detail.edited_by">Edited by : {{attendance_detail.editor}}</div>
+                                        <div *ngIf="attendance_detail.edited_by">Reason : {{attendance_detail.edited_reason}}</div>
+                                    </ng-template>
+                                    <td width="3%" [tooltip]="tolTemplate" container="body" [ngClass]="{'warning_background': attendance_detail.edited_by}"><i [ngClass]="['fa attendance-check', attendance_detail.icon]"></i></td>
+                                </ng-container>
+                                <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]">
+                                    <td class="gray_background" width="3%" *ngIf="number > attendance.attendance_details.length"></td>
+                                </ng-container>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="isEdittingAttendance">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th width="10%">Code</th>
+                            <th>Name</th>
+                            <th colspan="2">Week 1</th>
+                            <th colspan="2">Week 2</th>
+                            <th colspan="2">Week 3</th>
+                            <th colspan="2">Week 4</th>
+                            <th colspan="2">Week 5</th>
+                            <th colspan="2">Week 6</th>
+                            <th colspan="2">Week 7</th>
+                            <th colspan="2">Week 8</th>
+                            <th colspan="2">Week 9</th>
+                            <th colspan="2">Week 10</th>
+                            <th colspan="2">Week 11</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let attendance of temp_attendance_lists[selected_class_index];let i = index">
+                            <td (click)="onRemoveAttendanceClick(i)"><i class="fa fa-close attendance-check" style="color:red"></i></td>
+                            <td>{{attendance.code}}</td>
+                            <td><input class="form-control" [(ngModel)]="attendance.name" name="name{{i}}" /></td>
+                            <ng-container *ngIf="attendance.exemption">
+                                <td class="gray_background" colspan="22" style="font-weight: bold;">Exempted</td>
+                            </ng-container>
+                            <ng-container *ngIf="!attendance.exemption">
+                                <ng-container *ngFor="let attendance_detail of attendance.attendance_details;let j = index">
+                                    <ng-template #tolTemplate>
+                                        <div>Method : {{attendance_detail.method}}</div>
+                                        <div>Created at : {{attendance_detail.created_at | date:'short'}}</div>
+                                        <div>Edited at : {{attendance_detail.attendance_time | date:'short'}}</div>
+                                        <div *ngIf="attendance_detail.edited_by">Edited by : {{attendance_detail.editor}}</div>
+                                        <div *ngIf="attendance_detail.edited_by">Reason : {{attendance_detail.edited_reason}}</div>
+                                    </ng-template>
+                                    <td width="3%" [tooltip]="tolTemplate" container="body" [ngClass]="{'warning_background': attendance_detail.edited_by}" (click)="onAttendanceCheckClick(i,j)"><i [ngClass]="['fa attendance-check', attendance_detail.icon]"></i></td>
+                                </ng-container>
+                                <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]">
+                                    <td class="gray_background" width="3%" *ngIf="number > attendance.attendance_details.length"></td>
+                                </ng-container>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="form-horizontal">
+                    <div class="form-group" (keydown)="keyDownFunction($event)">
+                        <label class="control-label col-sm-2">Add student to course : </label>
+                        <div class="col-sm-2">
+                            <input type="text" placeholder="Code" [(ngModel)]="new_code" (ngModelChange)="getSearchingStudentDetail()" name="new_code" required="required" class="form-control">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="text" placeholder="Name" [(ngModel)]="new_name" name="new_name" required="required" class="form-control">
+                        </div>
+                        <button class="btn btn-success" (click)="onAddToAttendanceList()"><i class="fa fa-plus"></i> Add</button>
+                    </div>
+                    <div class="pull-right">
+                        <button class="btn btn-default" (click)="onCancelEditAttendance()">Cancel</button>
+                        <button class="btn btn-success" (click)="onSaveEditAttendance()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<import-modal [import_type]="appService.import_export_type.attendance_list" [title]="import_title" (onClose)="onCloseImport($event)"></import-modal>
+<map-modal [title]="map_title" ></map-modal>
+<edit-schedule-modal [modal_id]="scheduleModal.id" [modal_title]="scheduleModal.title" [classes]="class_has_course" (onSave)="onSaveSchedule($event)" [view_only]="course['not_in_current_course']"></edit-schedule-modal>
+<div class="modal fade" id="confirmRemoveModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Remove this student from the list ?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="onRemoveFromAttendanceList()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmChangeAttendanceDetailModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirm change attendance detail for this student ?</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea autosize class="form-control only_bottom_border" placeholder="Reason" [(ngModel)]="edit_attendance_reason" style="resize: none;"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="confirmChangeAttendanceDetail()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

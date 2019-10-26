@@ -1,0 +1,169 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div *ngIf="student_not_found" class="x_panel">
+        <div class="x_title">
+            <h3 class="course_title">Student not found</h3>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div *ngIf="!student_not_found" class="x_panel">
+        <div class="x_content">
+            <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                <img id="profilePic" style="height:150px;width:150px;padding-bottom: 5px;" [src]="student.avatar">
+                <ng-container *ngIf="!isEditingStudent">
+                    <h3>{{editing_name}}</h3>
+                    <ul class="list-unstyled user_data" style="font-size: medium;">
+                        <li *ngIf="student.status == appService.student_status.active.id" style="color: green">
+                            <i class="fa fa-info-circle"></i> {{appService.student_status.active.title}}
+                        </li>
+                        <li *ngIf="student.status == appService.student_status.reserved.id" style="color: orange">
+                            <i class="fa fa-info-circle"></i> {{appService.student_status.reserved.title}}
+                        </li>
+                        <li *ngIf="student.status == appService.student_status.dropped.id" style="color: red">
+                            <i class="fa fa-info-circle"></i> {{appService.student_status.dropped.title}}
+                        </li>
+                        <li>
+                            <i class="fa fa-id-card-o"></i> {{student.code}}
+                        </li>
+                        <li>
+                            <i class="fa fa-group"></i> {{student.class_name}}
+                        </li>
+                        <li>
+                            <i class="fa fa-phone"></i> {{student.phone}}
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope-o"></i> {{student.email}}
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary" (click)="onEditStudent()"><i class="fa fa-pencil"></i> Edit</button>
+                </ng-container>
+                <ng-container *ngIf="isEditingStudent">
+                    <h3><input class="form-control" type="text" name="editing_name" [(ngModel)] = "editing_name"></h3>
+                    <ul class="list-unstyled user_data" style="font-size: medium;">
+                        <li>
+                            <i class="fa fa-info-circle"></i>
+                            <select class="form-control" [(ngModel)]="editing_status">
+                                <option [value]="appService.student_status.active.id">{{appService.student_status.active.title}}</option>
+                                <option [value]="appService.student_status.reserved.id">{{appService.student_status.reserved.title}}</option>
+                                <option [value]="appService.student_status.dropped.id">{{appService.student_status.dropped.title}}</option>
+                            </select>
+                        </li>
+                        <li>
+                            <i class="fa fa-id-card-o"></i> {{student.code}}
+                        </li>
+                        <li>
+                            <i class="fa fa-group"></i> {{student.class_name}}
+                        </li>
+                        <li>
+                            <i class="fa fa-phone"></i>
+                            <input class="form-control" type="text" name="editing_phone" [(ngModel)]="editing_phone">
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope-o"></i>
+                            <input class="form-control" type="text" name="editing_mail" [(ngModel)]="editing_mail">
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" (click)="onCancelEditStudent()">Cancel</button>
+                    <button class="btn btn-success" (click)="onSaveEditStudent()">Save</button>
+                </ng-container>
+                <br />
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                <tabset>
+                    <tab heading='Current Courses'>
+                        <table class="data table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Lecturers</th>
+                                    <th>No. Absences</th>
+                                    <th>Attendance Status</th>
+                                    <!-- <th>Enrollment Status</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let course of current_courses">
+                                    <td><a routerLink="/courses/{{course.id}}" routerLinkActive="active"><strong>{{course.code}} - {{course.name}}</strong></a></td>
+                                    <td>{{course.lecturers}}</td>
+                                    <td>{{course.absence_count}}</td>
+                                    <td *ngIf="course.attendance_status == appService.attendance_status.normal"><button class="btn btn-primary" (click)="onChangeAttendanceStatus(course.id,appService.attendance_status.exemption)">Normal</button></td>
+                                    <td *ngIf="course.attendance_status == appService.attendance_status.exemption"><button class="btn btn-warning" (click)="onChangeAttendanceStatus(course.id,appService.attendance_status.normal)">Exemption</button></td>
+                                    <!-- <td *ngIf="course.enrollment_status == appService.enrollment_status.compulsory">Compulsory</td>
+                                    <td *ngIf="course.enrollment_status == appService.enrollment_status.elective">Elective</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </tab>
+                    <tab heading='Absence Requests'>
+                        <table class="data table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>Reason</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                    <th>Accepted/Rejected At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let request of absence_requests">
+                                    <td>{{request.reason}}</td>
+                                    <td>{{request.start_date | date: 'dd/MM/yyyy'}}</td>
+                                    <td>{{request.end_date | date: 'dd/MM/yyyy'}}</td>
+                                    <td *ngIf="request.status == appService.absence_request_status.new.id" style="color: blue">{{appService.absence_request_status.new.title}}</td>
+                                    <td *ngIf="request.status == appService.absence_request_status.accepted.id" style="color: green">{{appService.absence_request_status.accepted.title}}</td>
+                                    <td *ngIf="request.status == appService.absence_request_status.rejected.id" style="color: red">{{appService.absence_request_status.rejected.title}}</td>
+                                    <td>{{request.created_at | date: 'short'}}</td>
+                                    <td *ngIf="request.status == appService.absence_request_status.new.id"></td>
+                                    <td *ngIf="request.status != appService.absence_request_status.new.id">{{request.updated_at | date: 'short'}}</td>
+                                    <td *ngIf="request.status == appService.absence_request_status.new.id"><button class="btn btn-success btn-sm" (click)="onAcceptRequest(request.id)">Accept</button><button class="btn btn-danger btn-sm" (click)="onRejectRequest(request.id)">Reject</button></td>
+                                    <td *ngIf="request.status != appService.absence_request_status.new.id"><button class="btn btn-warning btn-sm" (click)="onUndoRequest(request.id)">Undo</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<result-message-modal [modal_title]="apiResult" [modal_message]="apiResultMessage"></result-message-modal>
+<div class="modal fade" id="confirmModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{confirm_modal_title}}</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="confirmAction()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmChangeAttendanceStatusModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog modal-sm vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{confirm_modal_title}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="current_attendance_status == appService.attendance_status.exemption">
+                        <label>*Only do this when you received permission from the lecturer</label>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default btn-success" (click)="confirmChangeAttendanceStatus()" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="modal fade" id="importModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{title}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="note" class="form-group text-center">
+                        <label>{{note}}</label>
+                    </div>
+                    <ng-container *ngIf="import_type != appService.import_export_type.attendance_list">
+                        <div class="file-drop nv-file-over" ng2FileDrop [uploader]="uploader" (onFileDrop)="onSelectFile($event)">
+                            <h2>Drag files here</h2>
+                        </div>
+                        <br> Or click here
+                        <label class="btn btn-primary btn-sm btn-file">
+                            Choose files
+                            <input type="file" multiple accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" (change)="onSelectFile($event.target.files)">
+                        </label>
+                    </ng-container>
+                    <ng-container *ngIf="import_type == appService.import_export_type.attendance_list">
+                        <div class="file-drop nv-file-over" ng2FileDrop [uploader]="uploader" (onFileDrop)="onSelectFile($event)">
+                            <h2>Drag file here</h2>
+                        </div>
+                        <br> Or click here
+                        <label class="btn btn-primary btn-sm btn-file">
+                            Choose file
+                            <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" (change)="onSelectFile($event.target.files)">
+                        </label>
+                    </ng-container>
+                    <div style="overflow:auto; max-height:400px;">
+                        <table *ngIf="import_list.length > 0" class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th><button *ngIf="!isImporting" class="btn btn-danger btn-sm" (click)="onRemoveAllFile()">Remove All</button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr *ngFor="let import of import_list; let i = index">
+                                        <td>{{import.file['name']}}</td>
+                                        <td *ngIf="import.result == ''"></td>
+                                        <td [tooltip]="import.result_message" container="body" *ngIf="import.result == 'success'" style="color: green"><i class="fa fa-check-circle fa-2x"></i></td>
+                                        <td [tooltip]="import.result_message" container="body" *ngIf="import.result == 'failure'" style="color: red"><i class="fa fa-exclamation-circle fa-2x"></i></td>
+                                        <td><button *ngIf="!isImporting" class="btn btn-danger btn-sm" (click)="onRemoveFile(i)">Remove</button><label *ngIf="isImporting && this.import_progress == (100 / this.import_list.length * i)" style="color: green">Processing</label></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="import_list.length > 0">
+                        Progress:
+                        <div class="progress" style="">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" [ngStyle]="{ 'width': import_progress + '%' }"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" (click)="onCancelImport()">Cancel</button>
+                        <button *ngIf="!isImporting" type="button" class="btn btn-success" (click)="onImport()">Import</button>
+                        <button *ngIf="isImporting" type="button" class="btn btn-danger" (click)="onStopImport()">Stop</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

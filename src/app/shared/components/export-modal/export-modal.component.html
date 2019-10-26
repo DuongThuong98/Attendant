@@ -1,0 +1,109 @@
+<div class="modal fade" id="exportModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div [ngClass] = "{'modal-content':true, 'larger_modal':larger_modal}">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{title}}</h4>
+                </div>
+                <div class="row modal-body">
+                    <div class="col-sm-6">
+                        <div *ngIf="export_type != appService.import_export_type.examinees && export_type != appService.import_export_type.attendance_summary && export_type != appService.import_export_type.attendance_lists && export_type != appService.import_export_type.exceeded_absence_limit" class="radio">
+                            <label>
+                                <input type="radio" name="optradio" [value]="1" [(ngModel)]="export_on_search">Export based on Search results</label>
+                        </div>
+                        <div *ngIf="export_type != appService.import_export_type.teacher" class="radio">
+                            <label>
+                                <input type="radio" name="optradio" [value]="0" [(ngModel)]="export_on_search">Export based on selection</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" *ngIf="export_on_search">
+                        <div>
+                            <input placeholder="File name" class="form-control" [(ngModel)]="file_name" />
+                        </div>
+                    </div>
+                    <div *ngIf="!export_on_search && (export_type == appService.import_export_type.examinees || export_type == appService.import_export_type.attendance_summary || export_type == appService.import_export_type.attendance_lists || export_type == appService.import_export_type.exceeded_absence_limit)">
+                        <div class="col-sm-6 form-horizontal">
+                            <div class="col-sm-6">
+                                <h4 class="pull-right">Semester : </h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <select class="form-control" [(ngModel)]="selectedSemester" (ngModelChange)="onGetProgramHasCourse()">
+                                    <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row col-xs-12">
+                            <hr>
+                            <ng-container *ngFor="let program of program_has_course; let i = index">
+                                <div class="col-sm-4">
+                                    <label>{{program.name}}</label>
+                                    <div style="overflow:auto;max-height:300px;">
+                                        <table class="table text-center table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th><label><input type="checkbox" [(ngModel)]="select_all_program_has_course[i]" (ngModelChange)="onSelectAllProgramHasCourse(i)"></label></th>
+                                                    <th>Course</th>
+                                                    <th width="25%">Class</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let course of program.courses">
+                                                    <td><label><input type="checkbox" [(ngModel)]="course.selected"></label></td>
+                                                    <td>{{course.code}} - {{course.name}}</td>
+                                                    <td>{{course.class_name}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="!export_on_search && export_type == appService.import_export_type.schedule">
+                        <div class="col-sm-12">
+                        </div>
+                        <div class="col-sm-6" style="overflow:auto;max-height:300px;">
+                            <table class="table text-center table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th><label><input type="checkbox" [(ngModel)]="select_all_program" (ngModelChange)="onSelectAllProgram()"></label></th>
+                                        <th>Program</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let program of programs; let i = index">
+                                        <td><label><input type="checkbox" [(ngModel)]="program.selected"></label></td>
+                                        <td>{{program.name}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div *ngIf="!export_on_search" class="col-sm-6">
+                        <div *ngIf="export_type == appService.import_export_type.student || export_type == appService.import_export_type.course || export_type == appService.import_export_type.schedule" style="overflow:auto; max-height:300px;">
+                            <table class="table text-center table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th><label><input type="checkbox" [(ngModel)]="select_all_class" (ngModelChange)="onSelectAllClass()"></label></th>
+                                        <th>Class</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let class of classes; let i = index">
+                                        <td><label><input type="checkbox" [(ngModel)]="class.selected"></label></td>
+                                        <td>{{class.name}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" (click)="onCancelExport()">Cancel</button>
+                    <button *ngIf="!isExporting" type="button" class="btn btn-success" (click)="onExport()">Export</button>
+                    <button *ngIf="isExporting" type="button" class="btn btn-danger" (click)="onStopExport()">Stop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

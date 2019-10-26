@@ -1,0 +1,74 @@
+<div class="modal fade" id="sendFeedbackModal" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Feedback</h4>
+                </div>
+                <form class="form-horizontal form-label-left">
+                    <div class="modal-body">
+                        <div class="row">
+                            <ng-container *ngIf="authService.current_user.role_id == appService.userType.teacher">
+                                <div class="form-group">
+                                    <label class="control-label col-md-6 col-sm-6 col-xs-12"> Receiver : Academic Affair </label>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="authService.current_user.role_id == appService.userType.student">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"> Receiver* </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" name="receiver" [(ngModel)]="selected_receiver">
+                                            <option *ngFor="let receiver of receivers" [value]="receiver.id">{{receiver.title}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" *ngIf="selected_receiver">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"> Lecturer/TA* </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control" name="teacher" [(ngModel)]="selected_teacher">
+                                            <option *ngFor="let teacher of teacher_list" [value]="teacher.id">{{teacher.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Category* </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control" name="category" [(ngModel)]="selected_category">
+                                        <ng-container *ngFor="let category of appService.feedback_categories">
+                                            <option *ngIf="category.id > 0" [value]="category.id">{{category.title}}</option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Title* </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" name="title" class="form-control" [(ngModel)]="title" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> Content* </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea class="form-control" name="content" rows="4" [(ngModel)]="content"></textarea>
+                                </div>
+                            </div>
+                            <div *ngIf="authService.current_user.role_id != appService.userType.teacher" class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-11"> Anonymous? </label>
+                                <div class="col-xs-1">
+                                    <input class="form-control" type="checkbox" name="isAnonymous" [(ngModel)]="isAnonymous" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default btn-success" (click)="onSendFeedback()">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

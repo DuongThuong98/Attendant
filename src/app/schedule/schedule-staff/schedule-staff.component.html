@@ -1,0 +1,135 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Schedule</h3>
+            <div class="row">
+                <div class="pull-right navbar-btn">
+                    <button id="import_schedule" type="button" class="btn btn-primary btn-round" (click)="onImportSchedule()"><i class="fa fa-upload"></i> Import</button>
+                    <button type="button" class="btn btn-primary btn-round" (click)="onExportSchedule()"> <i class="fa fa-download"></i> Export</button>
+                </div>
+                <div class="col-xs-6 navbar-btn">
+                    <div class="col-xs-4">
+                        <select class="form-control" [(ngModel)]="selectedProgram" (ngModelChange)="onChangeProgram()">
+                            <option *ngFor="let program of programs" [value]="program.id">{{program.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-4">
+                        <select class="form-control" [(ngModel)]="selectedClass" (ngModelChange)="onChangeClass()">
+                            <option *ngFor="let class of filteredClasses" [value]="class.id">{{class.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-4">
+                        <select class="form-control" [(ngModel)]="selectedSemester" (ngModelChange)="onChangeSemester()">
+                            <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="text-center">
+                <h4> Study time : {{semester['start_date'] | date: 'shortDate'}} - {{semester['end_date'] | date: 'shortDate'}}</h4>
+                <h4> Vacation time : {{semester['vacation_time']}}</h4>
+            </div>
+            <table class="table table-bordered text-center">
+                <thead class="text-center">
+                    <tr>
+                        <th width="10%"> </th>
+                        <th width="15%">2</th>
+                        <th width="15%">3</th>
+                        <th width="15%">4</th>
+                        <th width="15%">5</th>
+                        <th width="15%">6</th>
+                        <th width="15%">7</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>(LT)7:30-9:10<br/>(TH)7:30-9:30</strong></td>
+                        <td><strong *ngFor="let course of sessions[0]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[4]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[8]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[12]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[16]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[20]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>(LT)9:30-11:10<br/>(TH)9:30-11:30</strong></td>
+                        <td><strong *ngFor="let course of sessions[1]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[5]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[9]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[13]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[17]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[21]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>(LT)13:30-15:10<br/>(TH)13:30-15:30</strong></td>
+                        <td><strong *ngFor="let course of sessions[2]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[6]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[10]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[14]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[18]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[22]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>(LT)15:30-17:10<br/>(TH)15:30-17:30</strong></td>
+                        <td><strong *ngFor="let course of sessions[3]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[7]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[11]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[15]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[19]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                        <td><strong *ngFor="let course of sessions[23]" [ngClass] = "{'underline':course.type == 'TH'}" [className]="course.color_class">{{course.code}} ({{course.class_name}}) {{course.room}}<br/></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h3>Courses</h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Teacher</th>
+                        <th>TAs</th>
+                        <th>Office Hour</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let course of courses; let i = index" (click)="onCourseClick(course.id)">
+                        <td>{{i}}</td>
+                        <td class="{{course.color_class}}"><strong>{{course.code}}</strong></td>
+                        <td>{{course.name}}</td>
+                        <td>{{course.class_name}}</td>
+                        <td>{{course.lecturers}}</td>
+                        <td>{{course.tas}}</td>
+                        <td>{{course.office_hour}}</td>
+                        <td>{{course.note}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<import-modal [import_type]="appService.import_export_type.schedule" [title]="'Import Schedule'" [note]="'*Program is based on file name, e.g. CLC.xlsx. Imported courses will belong to the lastest semester.'" (onClose)="onCloseImport($event)"></import-modal>
+<export-modal [export_type]="appService.import_export_type.schedule" [title]="'Export Schedule'" [search_data]="export_search_data"></export-modal>

@@ -1,0 +1,3 @@
+<app-schedule-staff *ngIf="authService.current_user.role_id == appService.userType.staff"></app-schedule-staff>
+<app-schedule-student *ngIf="authService.current_user.role_id == appService.userType.student"></app-schedule-student>
+<app-schedule-teacher *ngIf="authService.current_user.role_id == appService.userType.teacher"></app-schedule-teacher>

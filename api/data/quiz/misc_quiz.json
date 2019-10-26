@@ -1,0 +1,227 @@
+[
+  {
+    "text": "Bản đồ Việt Nam hình gì?",
+    "option_a": "Chữ C",
+    "option_b": "Chữ I",
+    "option_c": "Chữ S",
+    "option_d": "Chữ U",
+    "correct_option": "Chữ S",
+    "timer": 10
+  },
+  {
+    "text": "Xe hơi có mấy bánh?",
+    "option_a": "1",
+    "option_b": "2",
+    "option_c": "3",
+    "option_d": "4",
+    "correct_option": "4",
+    "timer": 10
+  },
+  {
+    "text": "Trung Quốc thuộc châu lục nào?",
+    "option_a": "Châu Phi",
+    "option_b": "Châu Mỹ",
+    "option_c": "Châu Á",
+    "option_d": "Châu Đại Dương",
+    "correct_option": "Châu Á",
+    "timer": 10
+  },
+  {
+    "text": "Bệnh nào thuộc về thị giác?",
+    "option_a": "Cận thị",
+    "option_b": "Béo phì",
+    "option_c": "Loãng xương",
+    "option_d": "Tiểu đường",
+    "correct_option": "Cận thị",
+    "timer": 10
+  },
+  {
+    "text": "Logo Facebook có màu chủ đạo là màu gì?",
+    "option_a": "Vàng",
+    "option_b": "Xanh dương",
+    "option_c": "Cam",
+    "option_d": "Đỏ",
+    "correct_option": "Xanh dương",
+    "timer": 10
+  },
+  {
+    "text": "Thủ đô Việt Nam ở đâu?",
+    "option_a": "Cần Thơ",
+    "option_b": "Hải Phòng",
+    "option_c": "Hà Nội",
+    "option_d": "TPHCM",
+    "correct_option": "Hà Nội",
+    "timer": 10
+  },
+  {
+    "text": "Cách viết số tám trăm tám mươi ba?",
+    "option_a": "838",
+    "option_b": "883",
+    "option_c": "833",
+    "option_d": "888",
+    "correct_option": "883",
+    "timer": 10
+  },
+  {
+    "text": "Trái Đất nhận nhiệt từ đâu?",
+    "option_a": "Kim Tinh",
+    "option_b": "Mặt Trời",
+    "option_c": "Thiên Vương Tinh",
+    "option_d": "Thủy Tinh",
+    "correct_option": "Mặt Trời",
+    "timer": 10
+  },
+  {
+    "text": "Ngành nghề nào được xem là hoạt động nghệ thuật?",
+    "option_a": "Kỹ sư xây dựng",
+    "option_b": "Lập trình viên",
+    "option_c": "Vũ công",
+    "option_d": "Tài xế",
+    "correct_option": "Vũ công",
+    "timer": 10
+  },
+  {
+    "text": "Tên nào là tên của một mạng xã hội?",
+    "option_a": "Shiseido",
+    "option_b": "SCTV",
+    "option_c": "Facebook",
+    "option_d": "Converse",
+    "correct_option": "Facebook",
+    "timer": 10
+  },
+  {
+    "text": "Nội dung nào thuộc phạm vi bộ môn Thể Dục?",
+    "option_a": "Điện trở",
+    "option_b": "Số thập phân",
+    "option_c": "Đá cầu",
+    "option_d": "Quang hợp",
+    "correct_option": "Đá cầu",
+    "timer": 10
+  },
+  {
+    "text": "Con vật nào thuộc lớp Động vật Lưỡng cư?",
+    "option_a": "Gấu",
+    "option_b": "Gà",
+    "option_c": "Muỗi",
+    "option_d": "Ếch",
+    "correct_option": "Ếch",
+    "timer": 10
+  },
+  {
+    "text": "Thiết bị nào dùng để xem thời gian?",
+    "option_a": "Đồng hồ",
+    "option_b": "Máy in",
+    "option_c": "Máy ảnh",
+    "option_d": "Lò vi sóng",
+    "correct_option": "Đồng hồ",
+    "timer": 10
+  },
+  {
+    "text": "Địa điểm du lịch nào nằm ở Ai Cập?",
+    "option_a": "Tháp Eiffel",
+    "option_b": "Kim Tự Tháp",
+    "option_c": "Vạn Lý Trường Thành",
+    "option_d": "Vịnh Hạ Long",
+    "correct_option": "Kim Tự Tháp",
+    "timer": 10
+  },
+  {
+    "text": "Kinh, Tày, Nùng là tên của các đối tượng nào?",
+    "option_a": "Lục địa",
+    "option_b": "Quốc gia",
+    "option_c": "Dân tộc",
+    "option_d": "Tôn giáo",
+    "correct_option": "Dân tộc",
+    "timer": 10
+  },
+  {
+    "text": "Tên nào là tên một hệ điều hành?",
+    "option_a": "Microsoft Windows",
+    "option_b": "Microsoft Doors",
+    "option_c": "Microsoft Locks",
+    "option_d": "Microsoft Tables",
+    "correct_option": "Microsoft Windows",
+    "timer": 10
+  },
+  {
+    "text": "Hình nào luôn có ba cạnh?",
+    "option_a": "Hình tròn",
+    "option_b": "Hình vuông",
+    "option_c": "Hình tam giác",
+    "option_d": "Hình thang",
+    "correct_option": "Hình tam giác",
+    "timer": 10
+  },
+  {
+    "text": "Loại trái cây nào có gai trên vỏ?",
+    "option_a": "Chuối",
+    "option_b": "Sầu riêng",
+    "option_c": "Măng cụt",
+    "option_d": "Nhãn",
+    "correct_option": "Sầu riêng",
+    "timer": 10
+  },
+  {
+    "text": "Cơ sở khám và chữa trị cho người bệnh mang tên gì?",
+    "option_a": "Thư viện",
+    "option_b": "Trường",
+    "option_c": "Siêu thị",
+    "option_d": "Bệnh viện",
+    "correct_option": "Bệnh viện",
+    "timer": 10
+  },
+  {
+    "text": "Đơn vị tiền tệ chính thức của Việt Nam là gì?",
+    "option_a": "Yên",
+    "option_b": "Euro",
+    "option_c": "Đồng",
+    "option_d": "Nhân Dân Tệ",
+    "correct_option": "Đồng",
+    "timer": 10
+  },
+  {
+    "text": "Dụng cụ nào được dùng làm bếp?",
+    "option_a": "Chổi",
+    "option_b": "Chảo",
+    "option_c": "Kềm",
+    "option_d": "Kim tiêm",
+    "correct_option": "Chảo",
+    "timer": 10
+  },
+  {
+    "text": "Bộ phận nào loài người không sở hữu?",
+    "option_a": "Chân",
+    "option_b": "Mắt",
+    "option_c": "Tay",
+    "option_d": "Đuôi",
+    "correct_option": "Đuôi",
+    "timer": 10
+  },
+  {
+    "text": "Dấu cộng được thể hiện bằng ký hiệu toán học nào?",
+    "option_a": "+",
+    "option_b": ">",
+    "option_c": "=",
+    "option_d": "-",
+    "correct_option": "+",
+    "timer": 10
+  },
+  {
+    "text": "Logo của tập đoàn Apple có hình gì?",
+    "option_a": "Ngôi sao",
+    "option_b": "Cầu vồng",
+    "option_c": "Quả táo",
+    "option_d": "Hình thoi",
+    "correct_option": "Quả táo",
+    "timer": 10
+  },
+  {
+    "text": "Tên nào là tên của một thức uống có ga?",
+    "option_a": "Sony",
+    "option_b": "Coca Cola",
+    "option_c": "Casio",
+    "option_d": "Galaxy Cinema",
+    "correct_option": "Coca Cola",
+    "timer": 10
+  }
+]
