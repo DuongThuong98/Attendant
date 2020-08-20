@@ -41,7 +41,7 @@
     "angular2-qrcode": "^2.0.1",
     "angular2-text-mask": "^8.0.2",
     "async": "^2.4.1",
-    "bcrypt": "^1.0.2",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.17.1",
     "compression": "^1.6.2",
     "cookie-parser": "~1.4.3",
