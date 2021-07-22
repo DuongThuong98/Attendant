@@ -72,7 +72,7 @@
     "supervisor": "^0.12.0",
     "swagger-jsdoc": "^1.9.3",
     "ts-xlsx": "0.0.10",
-    "xlsx": "^0.10.6",
+    "xlsx": "^0.17.0",
     "xlsx-populate": "^1.10.0",
     "zone.js": "^0.8.4"
   },
